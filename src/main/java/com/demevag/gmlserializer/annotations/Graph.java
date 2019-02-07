@@ -1,0 +1,14 @@
+package com.demevag.gmlserializer.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Graph
+{
+    String id() default "g";
+    String edgedefault() default "undirected";
+}
