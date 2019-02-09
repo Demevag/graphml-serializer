@@ -91,7 +91,6 @@ public class Parser<T>
         return node;
     }
 
-    //TODO: source and target
     private GmlEdge parseEdge(Object object, GmlEdgeType edgeType) throws IllegalAccessException
     {
         Class edgeClass = object.getClass();
@@ -164,7 +163,6 @@ public class Parser<T>
 
     private void addDataAttribute(Field dataField, Object object, DataHandler dataHandler, GmlKeyTarget target) throws IllegalAccessException
     {
-        dataHandler.addDataAttribute(parseData(dataField, target, object));
 
         if (dataField.isAnnotationPresent(Id.class))
         {
@@ -173,7 +171,12 @@ public class Parser<T>
             dataHandler.setId(dataHandler.getId() + "_" + dataField.get(object));
 
             dataField.setAccessible(false);
+
+            return;
         }
+
+        dataHandler.addDataAttribute(parseData(dataField, target, object));
+
     }
 
     private GmlData parseData(Field field, GmlKeyTarget target, Object object) throws IllegalAccessException
