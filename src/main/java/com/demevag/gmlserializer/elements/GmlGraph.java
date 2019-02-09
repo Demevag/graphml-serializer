@@ -26,4 +26,14 @@ public class GmlGraph
         this.id = id;
         this.defaultEdgeType = defaultEdgeType;
     }
+
+    public void addEdges(List<GmlEdge> newEdges)
+    {
+        this.edges.addAll(newEdges);
+    }
+
+    public void addNodes(List<GmlNode> newNodes)
+    {
+        this.nodes.addAll(newNodes);
+    }
 }

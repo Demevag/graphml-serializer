@@ -41,4 +41,9 @@ public class GmlNode implements DataHandler
     {
         this.dataAttributes.add(data);
     }
+
+    public void addSubGraph(GmlGraph subGraph)
+    {
+        this.subGraphs.add(subGraph);
+    }
 }
