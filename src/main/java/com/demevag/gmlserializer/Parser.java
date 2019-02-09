@@ -40,20 +40,20 @@ public class Parser<T>
 
         Field[] fields = object.getClass().getDeclaredFields();
 
-        for(Field field : fields)
+        for (Field field : fields)
         {
-           if(isCollectionOfEdges(field))
-           {
-               graph.addEdges(parseCollectionOfEdges(field, object, defaultEdgeType));
-               continue;
-           }
-           if(isCollectionOfNodes(field))
-           {
-               graph.addNodes(parseCollectionOfNodes(field, object));
-               continue;
-           }
+            if (isCollectionOfEdges(field))
+            {
+                graph.addEdges(parseCollectionOfEdges(field, object, defaultEdgeType));
+                continue;
+            }
+            if (isCollectionOfNodes(field))
+            {
+                graph.addNodes(parseCollectionOfNodes(field, object));
+                continue;
+            }
 
-           throw new IllegalArgumentException("Graph "+object.getClass()+" must have only nodes and edges");
+            throw new IllegalArgumentException("Graph " + object.getClass() + " must have only nodes and edges");
         }
 
         return graph;
@@ -73,11 +73,21 @@ public class Parser<T>
 
         Field[] nodeFields = nodeClass.getDeclaredFields();
 
+        boolean hasId = false;
+
         for (Field field : nodeFields)
         {
+            if (isIdField(field))
+            {
+                node.setId(node.getId() + "_" + getFieldData(field, object));
+                hasId = true;
+
+                continue;
+            }
+
             if (isPrimitiveOrString(field))
             {
-                addDataAttribute(field, object, node, GmlKeyTarget.NODE);
+                node.addDataAttribute(parseData(field, GmlKeyTarget.NODE, object));
             } else if (field.isAnnotationPresent(SubGraph.class))
             {
                 SubGraph subGraphAnnotation = field.getAnnotation(SubGraph.class);
@@ -85,8 +95,10 @@ public class Parser<T>
                 node.addSubGraph(parseSubGraph(field, subGraphAnnotation.id(), subGraphAnnotation.edgedefault()));
             } else
                 throw new IllegalArgumentException(field.getName() + " is non-primitive and without SubGraph annotation");
-
         }
+
+        if(!hasId)
+            throw  new IllegalStateException(nodeClass.getName()+" has no id field");
 
         return node;
     }
@@ -99,15 +111,24 @@ public class Parser<T>
 
         Field[] nodeFields = edgeClass.getDeclaredFields();
 
+        boolean hasId = false;
+
         for (Field field : nodeFields)
         {
+            if (isIdField(field))
+            {
+                edge.setId(edge.getId() + "_" + getFieldData(field, object));
+                hasId = true;
+
+                continue;
+            }
+
             if (isPrimitiveOrString(field))
             {
-                addDataAttribute(field, object, edge, GmlKeyTarget.EDGE);
-            }
-            else if(field.isAnnotationPresent(EdgeSource.class))
+                edge.addDataAttribute(parseData(field, GmlKeyTarget.EDGE, object));
+            } else if (field.isAnnotationPresent(EdgeSource.class))
                 edge.setSourceId(getId(field, object));
-            else if(field.isAnnotationPresent(EdgeTarget.class))
+            else if (field.isAnnotationPresent(EdgeTarget.class))
                 edge.setTargetId(getId(field, object));
             else
                 throw new IllegalArgumentException(field.getName() + " is non-primitive");
@@ -119,13 +140,12 @@ public class Parser<T>
 
     private List<GmlEdge> parseCollectionOfEdges(Field field, Object object, GmlEdgeType defaultEdgeType) throws IllegalAccessException
     {
-        field.setAccessible(true);
-        Collection collection = (Collection)field.get(object);
-        field.setAccessible(false);
+
+        Collection collection = (Collection) getFieldData(field, object);
 
         List<GmlEdge> edges = new ArrayList<GmlEdge>();
 
-        for(Object o : collection)
+        for (Object o : collection)
         {
             edges.add(parseEdge(o, defaultEdgeType));
         }
@@ -135,13 +155,11 @@ public class Parser<T>
 
     private List<GmlNode> parseCollectionOfNodes(Field field, Object object) throws IllegalAccessException
     {
-        field.setAccessible(true);
-        Collection collection = (Collection)field.get(object);
-        field.setAccessible(false);
+        Collection collection = (Collection) getFieldData(field, object);
 
         List<GmlNode> nodes = new ArrayList<GmlNode>();
 
-        for(Object o : collection)
+        for (Object o : collection)
         {
             nodes.add(parseNode(o));
         }
@@ -161,33 +179,13 @@ public class Parser<T>
         return null;
     }
 
-    private void addDataAttribute(Field dataField, Object object, DataHandler dataHandler, GmlKeyTarget target) throws IllegalAccessException
-    {
-
-        if (dataField.isAnnotationPresent(Id.class))
-        {
-            dataField.setAccessible(true);
-
-            dataHandler.setId(dataHandler.getId() + "_" + dataField.get(object));
-
-            dataField.setAccessible(false);
-
-            return;
-        }
-
-        dataHandler.addDataAttribute(parseData(dataField, target, object));
-
-    }
-
     private GmlData parseData(Field field, GmlKeyTarget target, Object object) throws IllegalAccessException
     {
         Class dataType = field.getType();
 
-        GmlKey dataKey = new GmlKey(field.getName()+"_key", target, field.getName());
+        GmlKey dataKey = new GmlKey(field.getName() + "_key", target, field.getName());
 
-        field.setAccessible(true);
-        Object data = field.get(object);
-        field.setAccessible(false);
+        Object data = getFieldData(field, object);
 
         return new GmlData(dataKey, data);
     }
@@ -195,6 +193,11 @@ public class Parser<T>
     private boolean isPrimitiveOrString(Field field)
     {
         return field.getType().isPrimitive() || field.getType() == String.class;
+    }
+
+    private boolean isIdField(Field field)
+    {
+        return isPrimitiveOrString(field) && field.isAnnotationPresent(Id.class);
     }
 
     private boolean isNode(Field field)
@@ -240,13 +243,24 @@ public class Parser<T>
             ParameterizedType aType = (ParameterizedType) genericFieldType;
             Type[] fieldArgTypes = aType.getActualTypeArguments();
 
-            if(fieldArgTypes.length > 1)
+            if (fieldArgTypes.length > 1)
                 throw new IllegalArgumentException("Collection must have only one generic type");
 
-            return (Class)fieldArgTypes[0];
+            return (Class) fieldArgTypes[0];
         }
 
         return null;
+    }
+
+    public Object getFieldData(Field field, Object object) throws IllegalAccessException
+    {
+        field.setAccessible(true);
+
+        Object data = field.get(object);
+
+        field.setAccessible(false);
+
+        return data;
     }
 
     private String getId(Field field, Object object) throws IllegalAccessException
@@ -257,24 +271,19 @@ public class Parser<T>
 
         Field[] fieldsOfFieldClass = fieldClass.getDeclaredFields();
 
-        for(Field f : fieldsOfFieldClass)
+        for (Field f : fieldsOfFieldClass)
         {
-            if(f.isAnnotationPresent(Id.class) && idOfField == null)
+            if (f.isAnnotationPresent(Id.class) && idOfField == null)
                 idOfField = f;
-            else if(f.isAnnotationPresent(Id.class) && idOfField != null)
+            else if (f.isAnnotationPresent(Id.class) && idOfField != null)
                 throw new IllegalStateException(fieldClass.getName() + " contains more than one id field");
         }
 
-        if(idOfField == null)
+        if (idOfField == null)
             throw new IllegalStateException(fieldClass.getName() + " doesn't contain id field");
 
-        field.setAccessible(true);
-        idOfField.setAccessible(true);
+        String id = ( getFieldData(idOfField, getFieldData(field, object) ) ).toString();
 
-        String id = (idOfField.get(field.get(object))).toString();
-
-        field.setAccessible(false);
-        idOfField.setAccessible(false);
 
         return id;
     }

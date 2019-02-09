@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class GmlEdge implements DataHandler
+public class GmlEdge
 {
     private String id;
     private List<GmlData> dataAttributes = new ArrayList<GmlData>();
@@ -18,26 +18,6 @@ public class GmlEdge implements DataHandler
     {
         this.id = id;
         this.type = type;
-    }
-
-    public String getId()
-    {
-        return id;
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
-    }
-
-    public List<GmlData> getDataAttributes()
-    {
-        return dataAttributes;
-    }
-
-    public void setDataAttributes(List<GmlData> dataAttributes)
-    {
-        this.dataAttributes = dataAttributes;
     }
 
     public void addDataAttribute(GmlData data)
