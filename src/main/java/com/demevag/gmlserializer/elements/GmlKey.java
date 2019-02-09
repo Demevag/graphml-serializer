@@ -1,12 +1,12 @@
 package com.demevag.gmlserializer.elements;
 
-public class GmlKey<AttrType>
+public class GmlKey
 {
     private String id;
     private GmlKeyTarget target;
     private String atrrName;
 
-    private AttrType defaultVal;
+    private Object defaultVal;
 
     public GmlKey(String id, GmlKeyTarget target, String atrrName)
     {
@@ -15,7 +15,7 @@ public class GmlKey<AttrType>
         this.atrrName = atrrName;
     }
 
-    public GmlKey(String id, GmlKeyTarget target, String atrrName, AttrType defaultVal)
+    public GmlKey(String id, GmlKeyTarget target, String atrrName, Object defaultVal)
     {
         this.id = id;
         this.target = target;
@@ -53,12 +53,12 @@ public class GmlKey<AttrType>
         this.atrrName = atrrName;
     }
 
-    public AttrType getDefaultVal()
+    public Object getDefaultVal()
     {
         return defaultVal;
     }
 
-    public void setDefaultVal(AttrType defaultVal)
+    public void setDefaultVal(Object defaultVal)
     {
         this.defaultVal = defaultVal;
     }
@@ -69,7 +69,7 @@ public class GmlKey<AttrType>
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GmlKey<?> gmlKey = (GmlKey<?>) o;
+        GmlKey gmlKey = (GmlKey) o;
 
         if (id != null ? !id.equals(gmlKey.id) : gmlKey.id != null) return false;
         if (target != gmlKey.target) return false;

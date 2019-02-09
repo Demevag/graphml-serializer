@@ -1,37 +1,37 @@
 package com.demevag.gmlserializer.elements;
 
-public class GmlData<Type>
+public class GmlData
 {
-    private GmlKey<Type> key;
-    private Type data;
+    private GmlKey key;
+    private Object data;
 
-    public GmlData(GmlKey<Type> key)
+    public GmlData(GmlKey key)
     {
         this.key = key;
     }
 
-    public GmlData(GmlKey<Type> key, Type data)
+    public GmlData(GmlKey key, Object data)
     {
         this.key = key;
         this.data = data;
     }
 
-    public GmlKey<Type> getKey()
+    public GmlKey getKey()
     {
         return key;
     }
 
-    public void setKey(GmlKey<Type> key)
+    public void setKey(GmlKey key)
     {
         this.key = key;
     }
 
-    public Type getData()
+    public Object getData()
     {
         return data;
     }
 
-    public void setData(Type data)
+    public void setData(Object data)
     {
         this.data = data;
     }
@@ -42,7 +42,7 @@ public class GmlData<Type>
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GmlData<?> gmlData = (GmlData<?>) o;
+        GmlData gmlData = (GmlData) o;
 
         if (key != null ? !key.equals(gmlData.key) : gmlData.key != null) return false;
         return data != null ? data.equals(gmlData.data) : gmlData.data == null;

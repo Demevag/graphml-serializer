@@ -3,7 +3,7 @@ package com.demevag.gmlserializer.elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GmlNode
+public class GmlNode implements DataHandler
 {
     private String id;
     private List<GmlData> dataAttributes = new ArrayList<GmlData>();

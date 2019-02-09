@@ -8,8 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Graph
+@Target(ElementType.FIELD)
+public @interface SubGraph
 {
     String id() default "g";
     GmlEdgeType edgedefault() default GmlEdgeType.UNDIRECTED;

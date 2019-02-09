@@ -1,6 +1,7 @@
 package com.demevag.gmlserializer.elements;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class GmlGraph
@@ -67,11 +68,20 @@ public class GmlGraph
         this.nodes.add(node);
     }
 
+    public void addNodes(Collection<GmlNode> newNodes)
+    {
+        this.nodes.addAll(newNodes);
+    }
+
     public void addEdge(GmlEdge edge)
     {
         this.edges.add(edge);
     }
 
+    public void addEdges(Collection<GmlEdge> newEdges)
+    {
+        this.edges.addAll(newEdges);
+    }
     @Override
     public boolean equals(Object o)
     {
