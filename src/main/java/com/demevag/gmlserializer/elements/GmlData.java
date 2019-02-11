@@ -3,7 +3,7 @@ package com.demevag.gmlserializer.elements;
 import lombok.Data;
 
 @Data
-public class GmlData
+public class GmlData implements GmlElement
 {
     private GmlKey key;
     private Object data;

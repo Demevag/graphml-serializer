@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class GmlEdge
+public class GmlEdge implements GmlElement
 {
     private String id;
     private List<GmlData> dataAttributes = new ArrayList<GmlData>();
@@ -23,6 +23,11 @@ public class GmlEdge
     public void addDataAttribute(GmlData data)
     {
         this.dataAttributes.add(data);
+    }
+
+    public void addDataAttributes(List<GmlData> dataAttributes)
+    {
+        this.dataAttributes.addAll(dataAttributes);
     }
 
 

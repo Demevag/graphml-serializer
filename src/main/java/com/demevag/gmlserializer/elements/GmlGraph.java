@@ -8,7 +8,7 @@ import java.util.List;
 
 //TODO:method which return all GmlKey'
 @Data
-public class GmlGraph
+public class GmlGraph implements GmlElement
 {
     private String id;
 

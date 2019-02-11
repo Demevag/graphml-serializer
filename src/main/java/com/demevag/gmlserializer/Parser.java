@@ -2,6 +2,8 @@ package com.demevag.gmlserializer;
 
 import com.demevag.gmlserializer.annotations.*;
 import com.demevag.gmlserializer.elements.*;
+import com.demevag.gmlserializer.parsers.ElementParser;
+import com.demevag.gmlserializer.parsers.GmlDataParser;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -13,8 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 //TODO: normal work with exceptions
-//TODO: add logging
-//TODO: Список ребёр, может находится в узле, из которого они выходят
+//TODO: add loggin
 //TODO: Обрабатывать enum как data
 public class Parser
 {
@@ -30,7 +31,7 @@ public class Parser
         String graphId = graphAnnotation.id();
         GmlEdgeType defaultEdgeType = graphAnnotation.edgedefault();
 
-        return parseGraph(object,graphId, defaultEdgeType);
+        return parseGraph(object, graphId, defaultEdgeType);
     }
 
     private GmlGraph parseGraph(Object object, String graphId, GmlEdgeType defaultEdgeType) throws IllegalAccessException
@@ -41,7 +42,7 @@ public class Parser
 
         for (Field field : fields)
         {
-            if(field.isAnnotationPresent(Ignore.class))
+            if (field.isAnnotationPresent(Ignore.class))
                 continue;
 
             if (isCollectionOfEdges(field))
@@ -61,15 +62,14 @@ public class Parser
         return graph;
     }
 
-    //TODO: реализовать
-    private GmlGraph parseSubGraph(Field field,Object object, String graphId, GmlEdgeType defaultEdgeType) throws IllegalAccessException
+    private GmlGraph parseSubGraph(Field field, Object object, String graphId, GmlEdgeType defaultEdgeType) throws IllegalAccessException
     {
         Class fieldClass = field.getType();
 
-        if( field.isAnnotationPresent(Graph.class) )
+        if (field.isAnnotationPresent(Graph.class))
             return parseGraph(getFieldData(field, object), graphId, defaultEdgeType);
 
-        if(!isCollectionOfNodes(field))
+        if (!isCollectionOfNodes(field))
             throw new IllegalArgumentException(field.getName() + " is neither Graph nor Collection of nodes");
 
         GmlGraph graph = new GmlGraph(graphId, defaultEdgeType);
@@ -90,7 +90,7 @@ public class Parser
 
         for (Field field : nodeFields)
         {
-            if(field.isAnnotationPresent(Ignore.class))
+            if (field.isAnnotationPresent(Ignore.class))
                 continue;
 
             if (isIdField(field))
@@ -101,14 +101,14 @@ public class Parser
                 continue;
             }
 
-            if (isPrimitiveOrString(field))
-            {
-                node.addDataAttribute(parseData(field, GmlKeyTarget.NODE, object));
-            } else if (field.isAnnotationPresent(SubGraph.class))
+            if(isPrimitiveOrString(field))
+                continue;
+
+            if (field.isAnnotationPresent(SubGraph.class))
             {
                 SubGraph subGraphAnnotation = field.getAnnotation(SubGraph.class);
 
-                node.addSubGraph(parseSubGraph(field,object, subGraphAnnotation.id(), subGraphAnnotation.edgedefault()));
+                node.addSubGraph(parseSubGraph(field, object, subGraphAnnotation.id(), subGraphAnnotation.edgedefault()));
             } else if (isCollectionOfEdges(field))
             {
                 graph.addEdges(parseCollectionOfEdges(field, object, graph.getDefaultEdgeType(), getId(object), nodeClass.getName()));
@@ -116,8 +116,11 @@ public class Parser
                 throw new IllegalArgumentException(field.getName() + " is non-primitive and without SubGraph annotation");
         }
 
-        if(!hasId)
-            throw  new IllegalStateException(nodeClass.getName()+" has no id field");
+        ElementParser dataParser = new GmlDataParser(GmlKeyTarget.NODE, object);
+        node.addDataAttributes((List<GmlData>) dataParser.parse(nodeFields));
+
+        if (!hasId)
+            throw new IllegalStateException(nodeClass.getName() + " has no id field");
 
         return node;
     }
@@ -134,7 +137,7 @@ public class Parser
 
         for (Field field : nodeFields)
         {
-            if(field.isAnnotationPresent(Ignore.class))
+            if (field.isAnnotationPresent(Ignore.class))
                 continue;
 
             if (isIdField(field))
@@ -144,21 +147,20 @@ public class Parser
 
                 continue;
             }
-
-            if (isPrimitiveOrString(field))
-            {
-                edge.addDataAttribute(parseData(field, GmlKeyTarget.EDGE, object));
-            } else if (field.isAnnotationPresent(EdgeSource.class))
-                edge.setSourceId(field.getType().getName()+"_"+getId(field, object));
+            if (field.isAnnotationPresent(EdgeSource.class))
+                edge.setSourceId(field.getType().getName() + "_" + getId(field, object));
             else if (field.isAnnotationPresent(EdgeTarget.class))
-                edge.setTargetId(field.getType().getName()+"_"+getId(field, object));
+                edge.setTargetId(field.getType().getName() + "_" + getId(field, object));
             else
                 throw new IllegalArgumentException(field.getName() + " is non-primitive");
-
         }
+        ;
 
-        if(!hasId)
-            throw  new IllegalStateException(edgeClass.getName()+" has no id field");
+        ElementParser dataParser = new GmlDataParser(GmlKeyTarget.EDGE, object);
+        edge.addDataAttributes((List<GmlData>) dataParser.parse(nodeFields));
+
+        if (!hasId)
+            throw new IllegalStateException(edgeClass.getName() + " has no id field");
 
         return edge;
     }
@@ -190,7 +192,7 @@ public class Parser
     {
         List<GmlEdge> edges = parseCollectionOfEdges(field, object, defaultEdgeType);
 
-        for(GmlEdge edge : edges)
+        for (GmlEdge edge : edges)
             edge.setSourceId(sourceClassName + "_" + sourceId);
 
         return edges;
@@ -216,7 +218,7 @@ public class Parser
 
         List<GmlEdge> edges = new ArrayList<GmlEdge>();
 
-        for(Object o : map.values())
+        for (Object o : map.values())
         {
             GmlEdge edge = parseEdge(o, defaultEdgeType);
             //TODO: map keys = ?
@@ -233,7 +235,7 @@ public class Parser
 
         List<GmlNode> nodes = new ArrayList<GmlNode>();
 
-        for(Object o : map.values())
+        for (Object o : map.values())
         {
             GmlNode node = parseNode(o, graph);
             //TODO: map keys = ?
@@ -243,20 +245,9 @@ public class Parser
         return nodes;
     }
 
-    private GmlData parseData(Field field, GmlKeyTarget target, Object object) throws IllegalAccessException
-    {
-        GmlKey dataKey = new GmlKey(field.getName() + "_key", target, field.getName());
-
-        Object data = getFieldData(field, object);
-
-        dataKey.setAttrType(getDataType(data));
-
-        return new GmlData(dataKey, data);
-    }
-
     private String getDataType(Object data)
     {
-        if(data instanceof Integer)
+        if (data instanceof Integer)
             return "int";
 
         return data.getClass().getName().toLowerCase();
@@ -295,6 +286,9 @@ public class Parser
 
     private boolean isCollectionOfEdges(Field field)
     {
+        if(!isCollection(field))
+            return false;
+
         Class collectionArgClass = getCollectionArgClass(field);
 
         return collectionArgClass.isAnnotationPresent(Edge.class);
@@ -302,6 +296,9 @@ public class Parser
 
     private boolean isCollectionOfNodes(Field field)
     {
+        if(!isCollection(field))
+            return false;
+
         Class collectionArgClass = getCollectionArgClass(field);
 
         return collectionArgClass.isAnnotationPresent(Node.class);
@@ -355,7 +352,7 @@ public class Parser
         if (idOfField == null)
             throw new IllegalStateException(fieldClass.getName() + " doesn't contain id field");
 
-        String id = ( getFieldData(idOfField, getFieldData(field, object) ) ).toString();
+        String id = (getFieldData(idOfField, getFieldData(field, object))).toString();
 
 
         return id;
@@ -369,7 +366,7 @@ public class Parser
 
         Field idField = null;
 
-        for(Field field : fields)
+        for (Field field : fields)
         {
             if (field.isAnnotationPresent(Id.class) && idField == null)
                 idField = field;
@@ -377,6 +374,6 @@ public class Parser
                 throw new IllegalStateException(objectClass.getName() + " contains more than one id field");
         }
 
-        return (String)getFieldData(idField, object);
+        return (String) getFieldData(idField, object);
     }
 }

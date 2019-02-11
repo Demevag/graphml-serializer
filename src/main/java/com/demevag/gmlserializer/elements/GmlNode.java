@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class GmlNode
+public class GmlNode implements GmlElement
 {
     private String id;
     private List<GmlData> dataAttributes = new ArrayList<GmlData>();
@@ -25,5 +25,10 @@ public class GmlNode
     public void addSubGraph(GmlGraph subGraph)
     {
         this.subGraphs.add(subGraph);
+    }
+
+    public void addDataAttributes(List<GmlData> dataAttributes)
+    {
+        this.dataAttributes.addAll(dataAttributes);
     }
 }
