@@ -151,6 +151,9 @@ public class GmlSerializer
                     .attr("source", edge.getSourceId())
                     .attr("target", edge.getTargetId());
 
+            if(edge.getType() == GmlEdgeType.DIRECTED)
+                directives.attr("directed","true");
+
             addDataElements(edge.getDataAttributes(), directives);
 
             directives.up();
