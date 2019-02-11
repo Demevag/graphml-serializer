@@ -41,6 +41,9 @@ public class Parser
 
         for (Field field : fields)
         {
+            if(field.isAnnotationPresent(Ignore.class))
+                continue;
+
             if (isCollectionOfEdges(field))
             {
                 graph.addEdges(parseCollectionOfEdges(field, object, defaultEdgeType));
@@ -87,6 +90,9 @@ public class Parser
 
         for (Field field : nodeFields)
         {
+            if(field.isAnnotationPresent(Ignore.class))
+                continue;
+
             if (isIdField(field))
             {
                 node.setId(node.getId() + "_" + getFieldData(field, object));
@@ -128,6 +134,9 @@ public class Parser
 
         for (Field field : nodeFields)
         {
+            if(field.isAnnotationPresent(Ignore.class))
+                continue;
+
             if (isIdField(field))
             {
                 edge.setId(edge.getId() + "_" + getFieldData(field, object));
