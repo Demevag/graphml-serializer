@@ -5,7 +5,6 @@ import com.demevag.gmlserializer.elements.*;
 import com.demevag.gmlserializer.parsers.ElementParser;
 import com.demevag.gmlserializer.parsers.GmlDataParser;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -117,7 +116,7 @@ public class Parser
         }
 
         ElementParser dataParser = new GmlDataParser(GmlKeyTarget.NODE, object);
-        node.addDataAttributes((List<GmlData>) dataParser.parse(nodeFields));
+        node.addDataAttribute((List<GmlData>) dataParser.parse(nodeFields));
 
         if (!hasId)
             throw new IllegalStateException(nodeClass.getName() + " has no id field");

@@ -27,7 +27,12 @@ public class GmlNode implements GmlElement
         this.subGraphs.add(subGraph);
     }
 
-    public void addDataAttributes(List<GmlData> dataAttributes)
+    public void addSubGraph(List<GmlGraph> subGraphs)
+    {
+        this.subGraphs.addAll(subGraphs);
+    }
+
+    public void addDataAttribute(List<GmlData> dataAttributes)
     {
         this.dataAttributes.addAll(dataAttributes);
     }
