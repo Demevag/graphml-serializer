@@ -8,6 +8,7 @@ public class GmlKey
     private String id;
     private GmlKeyTarget target;
     private String atrrName;
+    private String attrType;
 
     private Object defaultVal;
 

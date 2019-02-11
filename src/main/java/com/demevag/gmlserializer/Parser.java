@@ -14,11 +14,11 @@ import java.util.Map;
 
 //TODO: Список ребёр, может находится в узле, из которого они выходят
 //TODO: Обрабатывать enum как data
-public class Parser<T>
+public class Parser
 {
     private GmlGraph graph;
 
-    public GmlGraph parse(T object) throws IllegalAccessException
+    public GmlGraph parse(Object object) throws IllegalAccessException
     {
         Class rootClass = object.getClass();
 
@@ -209,8 +209,19 @@ public class Parser<T>
 
         Object data = getFieldData(field, object);
 
+        dataKey.setAttrType(getDataType(data));
+
         return new GmlData(dataKey, data);
     }
+
+    private String getDataType(Object data)
+    {
+        if(data instanceof Integer)
+            return "int";
+
+        return data.getClass().getName().toLowerCase();
+    }
+
 
     private boolean isPrimitiveOrString(Field field)
     {
