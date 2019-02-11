@@ -59,14 +59,7 @@ public class GmlSerializer
                 .attr("xsi:schemaLocation", "http://graphml.graphdrawing.org/xmlns\n http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
 
         addKeyElements(graph, directives);
-
-        directives
-                .add("graph")
-                .attr("id", graph.getId())
-                .attr("edgedefault", graph.getDefaultEdgeType().toString());
-
-        addNodeElements(graph, directives);
-        addEdgeElements(graph, directives);
+        addGraph(graph, directives);
 
 
         String xml = new Xembler( directives ).xml();
@@ -76,6 +69,19 @@ public class GmlSerializer
         writer.print(xml);
         writer.flush();
 
+    }
+
+    private void addGraph(GmlGraph graph, Directives directives)
+    {
+        directives
+                .add("graph")
+                .attr("id", graph.getId())
+                .attr("edgedefault", graph.getDefaultEdgeType().toString());
+
+        addNodeElements(graph, directives);
+        addEdgeElements(graph, directives);
+
+        directives.up();
     }
 
     private void addKeyElements(GmlGraph graph, Directives directives)
@@ -127,6 +133,9 @@ public class GmlSerializer
                     .attr("id", node.getId());
 
             addDataElements(node.getDataAttributes(), directives);
+
+            for(GmlGraph subGraph : node.getSubGraphs())
+                addGraph(subGraph, directives);
 
             directives.up();
         }
