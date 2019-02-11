@@ -32,8 +32,18 @@ public class GmlGraph
         this.edges.addAll(newEdges);
     }
 
+    public void addEdge(GmlEdge edge)
+    {
+        this.edges.add(edge);
+    }
+
     public void addNodes(List<GmlNode> newNodes)
     {
         this.nodes.addAll(newNodes);
+    }
+
+    public void addNode(GmlNode node)
+    {
+        this.nodes.add(node);
     }
 }
