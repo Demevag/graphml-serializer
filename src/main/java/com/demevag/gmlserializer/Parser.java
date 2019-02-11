@@ -14,9 +14,10 @@ import java.util.Map;
 
 //TODO: Список ребёр, может находится в узле, из которого они выходят
 //TODO: Обрабатывать enum как data
-//TODO: Every node and edge should contain id
 public class Parser<T>
 {
+    private GmlGraph graph;
+
     public GmlGraph parse(T object) throws IllegalAccessException
     {
         Class rootClass = object.getClass();
@@ -29,14 +30,15 @@ public class Parser<T>
         String graphId = graphAnnotation.id();
         GmlEdgeType defaultEdgeType = graphAnnotation.edgedefault();
 
-        GmlGraph graph = parseGraph(object, graphId, defaultEdgeType);
+        graph = new GmlGraph(graphId, defaultEdgeType);
+
+        parseGraph(object, defaultEdgeType);
 
         return graph;
     }
 
-    private GmlGraph parseGraph(Object object, String graphId, GmlEdgeType defaultEdgeType) throws IllegalAccessException
+    private void parseGraph(Object object,  GmlEdgeType defaultEdgeType) throws IllegalAccessException
     {
-        GmlGraph graph = new GmlGraph(graphId, defaultEdgeType);
 
         Field[] fields = object.getClass().getDeclaredFields();
 
@@ -55,8 +57,6 @@ public class Parser<T>
 
             throw new IllegalArgumentException("Graph " + object.getClass() + " must have only nodes and edges");
         }
-
-        return graph;
     }
 
     //TODO: реализовать
@@ -93,6 +93,9 @@ public class Parser<T>
                 SubGraph subGraphAnnotation = field.getAnnotation(SubGraph.class);
 
                 node.addSubGraph(parseSubGraph(field, subGraphAnnotation.id(), subGraphAnnotation.edgedefault()));
+            } else if (isCollectionOfEdges(field))
+            {
+                graph.addEdges(parseCollectionOfEdges(field, object, graph.getDefaultEdgeType(), getId(object)));
             } else
                 throw new IllegalArgumentException(field.getName() + " is non-primitive and without SubGraph annotation");
         }
@@ -135,6 +138,17 @@ public class Parser<T>
 
         }
 
+        if(!hasId)
+            throw  new IllegalStateException(edgeClass.getName()+" has no id field");
+
+        return edge;
+    }
+
+    private GmlEdge parseEdge(Object object, GmlEdgeType edgeType, String sourceId) throws IllegalAccessException
+    {
+        GmlEdge edge = parseEdge(object, edgeType);
+        edge.setSourceId(sourceId);
+
         return edge;
     }
 
@@ -149,6 +163,16 @@ public class Parser<T>
         {
             edges.add(parseEdge(o, defaultEdgeType));
         }
+
+        return edges;
+    }
+
+    private List<GmlEdge> parseCollectionOfEdges(Field field, Object object, GmlEdgeType defaultEdgeType, String sourceId) throws IllegalAccessException
+    {
+        List<GmlEdge> edges = parseCollectionOfEdges(field, object, defaultEdgeType);
+
+        for(GmlEdge edge : edges)
+            edge.setSourceId(sourceId);
 
         return edges;
     }
@@ -181,8 +205,6 @@ public class Parser<T>
 
     private GmlData parseData(Field field, GmlKeyTarget target, Object object) throws IllegalAccessException
     {
-        Class dataType = field.getType();
-
         GmlKey dataKey = new GmlKey(field.getName() + "_key", target, field.getName());
 
         Object data = getFieldData(field, object);
@@ -286,5 +308,24 @@ public class Parser<T>
 
 
         return id;
+    }
+
+    private String getId(Object object) throws IllegalAccessException
+    {
+        Class objectClass = object.getClass();
+
+        Field[] fields = objectClass.getDeclaredFields();
+
+        Field idField = null;
+
+        for(Field field : fields)
+        {
+            if (field.isAnnotationPresent(Id.class) && idField == null)
+                idField = field;
+            else if (field.isAnnotationPresent(Id.class) && idField != null)
+                throw new IllegalStateException(objectClass.getName() + " contains more than one id field");
+        }
+
+        return (String)getFieldData(idField, object);
     }
 }
