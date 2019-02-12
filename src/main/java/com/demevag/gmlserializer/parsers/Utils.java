@@ -12,10 +12,7 @@ public class Utils
 {
     public static String getDataType(Object data)
     {
-        if(data instanceof Integer)
-            return "int";
-
-        return data.getClass().getName().toLowerCase();
+        return data.getClass().getName();
     }
 
 

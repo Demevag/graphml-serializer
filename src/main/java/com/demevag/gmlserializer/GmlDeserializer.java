@@ -4,6 +4,7 @@ import com.demevag.gmlserializer.elements.*;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
 import java.io.FileInputStream;
@@ -17,7 +18,7 @@ public class GmlDeserializer
 {
     private Map<String, GmlKey> keys;
 
-    GmlGraph deserialize(InputStream inputStream) throws JDOMException, IOException, ClassNotFoundException
+    public GmlGraph deserialize(InputStream inputStream) throws JDOMException, IOException, ClassNotFoundException
     {
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(inputStream);
@@ -25,14 +26,15 @@ public class GmlDeserializer
 
         keys = new HashMap<String, GmlKey>();
 
-        for(Element keyElement : root.getChildren("key"))
+        for(Element keyElement : root.getChildren("key", Namespace.getNamespace("http://graphml.graphdrawing.org/xmlns")))
         {
             GmlKey key = parseKey(keyElement);
 
             keys.put(key.getId(), key);
         }
 
-        return parseGraph(root.getChild("graph"));
+        Element graphElement = root.getChild("graph", Namespace.getNamespace("http://graphml.graphdrawing.org/xmlns"));
+        return parseGraph(graphElement);
     }
 
     private GmlKey parseKey(Element element)
@@ -79,7 +81,7 @@ public class GmlDeserializer
 
         GmlEdgeType edgeType = GmlEdgeType.UNDIRECTED;
 
-        if(edgeIsDirected.equals("true") )
+        if(edgeIsDirected != null && edgeIsDirected.equals("true") )
             edgeType = GmlEdgeType.DIRECTED;
 
         GmlEdge edge = new GmlEdge(edgeId, edgeType);
@@ -124,10 +126,33 @@ public class GmlDeserializer
 
         Class dataClass = Class.forName(keys.get(keyId).getAttrType());
 
-        Object data = dataClass.cast(element.getValue());
+        Object data =castFromString(element.getValue(), dataClass);
 
         dataAttribute.setData(data);
 
         return dataAttribute;
+    }
+
+    private Object castFromString(String value, Class dataClass)
+    {
+        if(String.class.isAssignableFrom(dataClass))
+            return value;
+
+        if(Integer.class.isAssignableFrom(dataClass))
+            return Integer.parseInt(value);
+
+        if(Long.class.isAssignableFrom(dataClass))
+            return Long.parseLong(value);
+
+        if(Short.class.isAssignableFrom(dataClass))
+            return Short.parseShort(value);
+
+        if(Float.class.isAssignableFrom(dataClass))
+            return Float.parseFloat(value);
+
+        if(Double.class.isAssignableFrom(dataClass))
+            return Double.parseDouble(value);
+
+        return null;
     }
 }
