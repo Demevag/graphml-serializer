@@ -36,7 +36,9 @@ public class GmlEdgeParser implements ElementParser
         Field[] edgeFields = edgeClass.getDeclaredFields();
 
         ElementParser dataParser = new GmlDataParser(GmlKeyTarget.EDGE, edgeObject);
+        ElementParser complexDataParser = new GmlComplexDataParser(GmlKeyTarget.EDGE, edgeObject);
         edge.addDataAttributes((List<GmlData>) dataParser.parse(edgeFields));
+        edge.addComplexDataAttribute((List<GmlComplexData>) complexDataParser.parse(edgeFields));
 
 
         boolean hasId = false;

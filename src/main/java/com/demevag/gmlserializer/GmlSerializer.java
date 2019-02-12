@@ -93,12 +93,19 @@ public class GmlSerializer
         {
             GmlEdge edge = graph.getEdges().get(0);
             dataAttributes.addAll(edge.getDataAttributes());
+
+            for (GmlComplexData complexData : edge.getComplexDataAttributes())
+                dataAttributes.addAll(complexData.getData());
         }
 
         if (graph.getNodes().size() > 0)
         {
             GmlNode node = graph.getNodes().get(0);
             dataAttributes.addAll(node.getDataAttributes());
+
+
+            for (GmlComplexData complexData : node.getComplexDataAttributes())
+                dataAttributes.addAll(complexData.getData());
         }
 
         for (GmlData dataAttrib : dataAttributes)
@@ -133,6 +140,7 @@ public class GmlSerializer
                     .attr("id", node.getId());
 
             addDataElements(node.getDataAttributes(), directives);
+            addComplexDataElements(node.getComplexDataAttributes(), directives);
 
             for(GmlGraph subGraph : node.getSubGraphs())
                 addGraph(subGraph, directives);
@@ -155,9 +163,16 @@ public class GmlSerializer
                 directives.attr("directed","true");
 
             addDataElements(edge.getDataAttributes(), directives);
+            addComplexDataElements(edge.getComplexDataAttributes(), directives);
 
             directives.up();
         }
+    }
+
+    private void addComplexDataElements(List<GmlComplexData> complexDataAttributes, Directives directives)
+    {
+        for(GmlComplexData complexData : complexDataAttributes)
+            addDataElements(complexData.getData(), directives);
     }
 
     private void addDataElements(List<GmlData> dataAttributes,Directives directives)

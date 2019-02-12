@@ -10,6 +10,7 @@ public class GmlEdge implements GmlElement
 {
     private String id;
     private List<GmlData> dataAttributes = new ArrayList<GmlData>();
+    private List<GmlComplexData> complexDataAttributes = new ArrayList<>();
     private GmlEdgeType type;
     private String targetId;
     private String sourceId;
@@ -30,5 +31,13 @@ public class GmlEdge implements GmlElement
         this.dataAttributes.addAll(dataAttributes);
     }
 
+    public void addComplexDataAttribute(GmlComplexData complexData)
+    {
+        this.complexDataAttributes.add(complexData);
+    }
 
+    public void addComplexDataAttribute(List<GmlComplexData> complexDataAttributes)
+    {
+        this.complexDataAttributes.addAll(complexDataAttributes);
+    }
 }

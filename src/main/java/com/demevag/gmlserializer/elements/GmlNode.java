@@ -11,6 +11,7 @@ public class GmlNode implements GmlElement
     private String id;
     private List<GmlData> dataAttributes = new ArrayList<GmlData>();
     private List<GmlGraph> subGraphs = new ArrayList<GmlGraph>();
+    private List<GmlComplexData> complexDataAttributes = new ArrayList<>();
 
     public GmlNode(String id)
     {
@@ -36,4 +37,15 @@ public class GmlNode implements GmlElement
     {
         this.dataAttributes.addAll(dataAttributes);
     }
+
+    public void addComplexDataAttribute(GmlComplexData complexData)
+    {
+        this.complexDataAttributes.add(complexData);
+    }
+
+    public void addComplexDataAttribute(List<GmlComplexData> complexDataAttributes)
+    {
+        this.complexDataAttributes.addAll(complexDataAttributes);
+    }
+
 }

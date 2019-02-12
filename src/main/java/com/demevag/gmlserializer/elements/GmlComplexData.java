@@ -2,21 +2,22 @@ package com.demevag.gmlserializer.elements;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Data
 public class GmlComplexData implements GmlElement
 {
-    private Map<GmlKey, Object> data;
+    private List<GmlData> data = new ArrayList<>();
 
-    public void addDataAttribute(GmlKey key, Object dataObject)
+    public void addDataAttribute(GmlData data)
     {
-        data.put(key, dataObject);
+        this.data.add(data);
     }
 
-    public void addDataAttribute(Map<GmlKey, Object> dataMap)
+    public void addDataAttribute(List<GmlData> dataAttributes)
     {
-        data.putAll(dataMap);
+        this.data.addAll(dataAttributes);
     }
 }

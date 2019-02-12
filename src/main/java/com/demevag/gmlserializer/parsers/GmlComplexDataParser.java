@@ -1,10 +1,7 @@
 package com.demevag.gmlserializer.parsers;
 
 import com.demevag.gmlserializer.annotations.ComplexData;
-import com.demevag.gmlserializer.elements.GmlComplexData;
-import com.demevag.gmlserializer.elements.GmlElement;
-import com.demevag.gmlserializer.elements.GmlKey;
-import com.demevag.gmlserializer.elements.GmlKeyTarget;
+import com.demevag.gmlserializer.elements.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -46,9 +43,12 @@ public class GmlComplexDataParser implements ElementParser
             String attrName = complexDataClass.getName() + "_"+field.getName();
 
             GmlKey key = new GmlKey(attrName+"_key", target, attrName);
+            key.setAttrType(field.getType().getName());
             Object data = Utils.getFieldData(field, complexDataObject);
 
-            complexData.addDataAttribute(key, data);
+            GmlData dataAttribute = new GmlData(key, data);
+
+            complexData.addDataAttribute(dataAttribute);
         }
 
         return complexData;
@@ -77,8 +77,8 @@ public class GmlComplexDataParser implements ElementParser
         {
             GmlComplexData complexData = (GmlComplexData) parse(object);
 
-            for(GmlKey key : complexData.getData().keySet())
-                key.setId(key.getId()+"#"+i);
+            for(GmlData data : complexData.getData())
+                data.getKey().setId(data.getKey().getId()+"#"+i);
 
             complexDataOfCollection.addDataAttribute(complexData.getData());
             i++;
