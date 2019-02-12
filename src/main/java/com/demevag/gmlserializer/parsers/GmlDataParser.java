@@ -10,15 +10,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GmlDataParser extends ElementParser
+public class GmlDataParser implements ElementParser
 {
     private GmlKeyTarget target;
-    private Object object;
+    private Object parentObject;
 
     public GmlDataParser(GmlKeyTarget target, Object object)
     {
         this.target = target;
-        this.object = object;
+        this.parentObject = object;
     }
 
     @Override
@@ -26,11 +26,17 @@ public class GmlDataParser extends ElementParser
     {
         GmlKey dataKey = new GmlKey(field.getName() + "_key", target, field.getName());
 
-        Object data = getFieldData(field, object);
+        Object data = Utils.getFieldData(field, parentObject);
 
-        dataKey.setAttrType(getDataType(data));
+        dataKey.setAttrType(Utils.getDataType(data));
 
         return new GmlData(dataKey, data);
+    }
+
+    @Override
+    public GmlElement parse(Object object)
+    {
+        return null;
     }
 
     @Override
@@ -42,9 +48,9 @@ public class GmlDataParser extends ElementParser
         {
             if(field.isAnnotationPresent(Ignore.class))
                 continue;
-            if(isIdField(field))
+            if(Utils.isIdField(field))
                 continue;
-            if (isPrimitiveOrString(field))
+            if (Utils.isPrimitiveOrString(field))
                 dataAttributes.add((GmlData)parse(field));
         }
 

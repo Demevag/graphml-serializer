@@ -1,35 +1,39 @@
 package com.demevag.gmlserializer.parsers;
 
-import com.demevag.gmlserializer.annotations.Ignore;
-import com.demevag.gmlserializer.annotations.SubGraph;
 import com.demevag.gmlserializer.elements.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GmlNodeParser extends ElementParser
+public class GmlNodeParser implements ElementParser
 {
     private GmlGraph graph;
-    private Object object;
+    private Object parentObject;
 
     public GmlNodeParser(Object object, GmlGraph graph)
     {
         this.graph = graph;
-        this.object = object;
+        this.parentObject = object;
     }
 
     public GmlElement parse(Field field) throws IllegalAccessException
     {
-        Class nodeClass = object.getClass();
+        return parse(Utils.getFieldData(field, parentObject));
+    }
+
+    @Override
+    public GmlElement parse(Object nodeObject) throws IllegalAccessException
+    {
+        Class nodeClass = nodeObject.getClass();
 
         GmlNode node = new GmlNode(nodeClass.getName());
 
         Field[] nodeFields = nodeClass.getDeclaredFields();
 
-        ElementParser dataParser = new GmlDataParser(GmlKeyTarget.NODE, object);
-        ElementParser subGraphParser = new GmlSubGraphParser(object);
-        ElementParser edgeCollectionParser = new GmlEdgeCollectionParser(object, graph.getDefaultEdgeType(), getId(object), nodeClass.getName());
+        ElementParser dataParser = new GmlDataParser(GmlKeyTarget.NODE, nodeObject);
+        ElementParser subGraphParser = new GmlSubGraphParser(nodeObject);
+        ContainerParser edgeCollectionParser = new GmlEdgeCollectionParser(nodeObject, graph.getDefaultEdgeType(), Utils.getId(nodeObject), nodeClass.getName());
 
         node.addDataAttribute((List<GmlData>) dataParser.parse(nodeFields));
         node.addSubGraph((List<GmlGraph>) subGraphParser.parse(nodeFields));
@@ -39,9 +43,9 @@ public class GmlNodeParser extends ElementParser
 
         for (Field nodeField : nodeFields)
         {
-            if (isIdField(nodeField))
+            if (Utils.isIdField(nodeField))
             {
-                node.setId(node.getId() + "_" + getFieldData(nodeField, object));
+                node.setId(node.getId() + "_" + Utils.getFieldData(nodeField, nodeObject));
                 hasId = true;
 
                 continue;
@@ -61,7 +65,7 @@ public class GmlNodeParser extends ElementParser
 
         for(Field field : fields)
         {
-            if(isNode(field))
+            if(Utils.isNode(field))
             {
                 nodes.add((GmlNode) parse(field));
             }
