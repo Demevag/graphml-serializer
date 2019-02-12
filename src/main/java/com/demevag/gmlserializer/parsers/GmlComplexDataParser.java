@@ -34,6 +34,9 @@ public class GmlComplexDataParser implements ElementParser
         if(Collection.class.isAssignableFrom(complexDataClass))
             return parseCollection((Collection)complexDataObject);
 
+        if(Enum.class.isAssignableFrom(complexDataClass))
+            return parseEnum((Enum)complexDataObject);
+
         GmlComplexData complexData = new GmlComplexData();
 
         Field[] fields = complexDataClass.getDeclaredFields();
@@ -85,5 +88,23 @@ public class GmlComplexDataParser implements ElementParser
         }
 
         return complexDataOfCollection;
+    }
+
+    private GmlComplexData parseEnum(Enum enumData)
+    {
+        Class enumClass = enumData.getDeclaringClass();
+
+        String attrName = enumClass.getName();
+
+        GmlKey key = new GmlKey(attrName+"_key", target, attrName);
+        key.setAttrType(String.class.getName());
+        Object data = enumData.name();
+
+        GmlData dataAttribute = new GmlData(key, data);
+
+        GmlComplexData complexData = new GmlComplexData();
+        complexData.addDataAttribute(dataAttribute);
+
+        return complexData;
     }
 }
