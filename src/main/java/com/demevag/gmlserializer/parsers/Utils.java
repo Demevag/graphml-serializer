@@ -28,17 +28,22 @@ public class Utils
 
     public static boolean isNode(Field field)
     {
-        return field.isAnnotationPresent(Node.class);
+        return field.getType().isAnnotationPresent(Node.class);
     }
 
     public static boolean isEdge(Field field)
     {
-        return field.isAnnotationPresent(Edge.class);
+        return field.getType().isAnnotationPresent(Edge.class);
     }
 
     public static boolean isCollection(Field field)
     {
         return Collection.class.isAssignableFrom(field.getType());
+    }
+
+    public static boolean isComplexData(Field field)
+    {
+        return field.isAnnotationPresent(ComplexData.class);
     }
 
     public static boolean isMap(Field field)
