@@ -71,6 +71,16 @@ public class Utils
         return collectionArgClass.isAnnotationPresent(Node.class);
     }
 
+    public static boolean isMapOfNodes(Field field)
+    {
+        if(!isMap(field))
+            return false;
+
+        Class mapValClass = getMapValueClass(field);
+
+        return mapValClass.isAnnotationPresent(Node.class);
+    }
+
     public static Class getCollectionArgClass(Field field)
     {
         Type genericFieldType = field.getGenericType();
@@ -84,6 +94,24 @@ public class Utils
                 throw new IllegalArgumentException("Collection must have only one generic type");
 
             return (Class) fieldArgTypes[0];
+        }
+
+        return null;
+    }
+
+    public static Class getMapValueClass(Field field)
+    {
+        Type genericFieldType = field.getGenericType();
+
+        if (genericFieldType instanceof ParameterizedType)
+        {
+            ParameterizedType aType = (ParameterizedType) genericFieldType;
+            Type[] fieldArgTypes = aType.getActualTypeArguments();
+
+            if (fieldArgTypes.length > 2 || fieldArgTypes.length < 2)
+                throw new IllegalArgumentException("Map must have two generic types");
+
+            return (Class) fieldArgTypes[1];
         }
 
         return null;

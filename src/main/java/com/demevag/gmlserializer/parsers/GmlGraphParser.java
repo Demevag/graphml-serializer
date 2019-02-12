@@ -37,9 +37,11 @@ public class GmlGraphParser implements ElementParser
         Field[] fields = graphObject.getClass().getDeclaredFields();
 
         ContainerParser nodeCollectionParser = new GmlNodeCollectionParser(graphObject, graph);
+        ContainerParser nodeMapParser = new GmlNodeMapParser(graphObject, graph);
         ContainerParser edgeCollectionParser = new GmlEdgeCollectionParser(graphObject, defaultEdgeType);
 
         graph.addNodes((List<GmlNode>) nodeCollectionParser.parse(fields));
+        graph.addNodes((List<GmlNode>) nodeMapParser.parse(fields));
         graph.addEdges((List<GmlEdge>) edgeCollectionParser.parse(fields));
 
         return graph;
