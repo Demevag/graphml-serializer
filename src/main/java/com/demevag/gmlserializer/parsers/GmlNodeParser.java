@@ -36,7 +36,7 @@ public class GmlNodeParser implements ElementParser
         ElementParser dataParser = new GmlDataParser(GmlKeyTarget.NODE, nodeObject);
         ElementParser complexDataParser = new GmlComplexDataParser(GmlKeyTarget.NODE, nodeObject);
         ElementParser subGraphParser = new GmlSubGraphParser(nodeObject);
-        ContainerParser edgeCollectionParser = new GmlEdgeCollectionParser(nodeObject, graph.getDefaultEdgeType(), Utils.getId(nodeObject), nodeClass.getName());
+        ContainerParser edgeCollectionParser = new GmlEdgeCollectionParser(nodeObject, graph.getDefaultEdgeType(), Utils.getId(nodeObject), nodeClassName);
 
         node.addDataAttribute((List<GmlData>) dataParser.parse(nodeFields));
         node.addComplexDataAttribute((List<GmlComplexData>) complexDataParser.parse(nodeFields));

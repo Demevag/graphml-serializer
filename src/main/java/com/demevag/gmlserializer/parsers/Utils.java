@@ -13,7 +13,28 @@ public class Utils
 {
     public static String getDataType(Object data)
     {
-        return data.getClass().getName();
+        String dataTypeName = "string";
+
+        Class dataClass = data.getClass();
+
+        return getDataType(dataClass);
+    }
+
+    public static String getDataType(Class dataClass)
+    {
+        String dataTypeName = "string";
+
+        if (dataClass.isPrimitive())
+        {
+            dataTypeName = dataClass.getName();
+
+            if (dataClass.getPackage() != null)
+                dataTypeName = dataTypeName
+                                        .replace(dataClass.getPackage().getName() + ".", "")
+                                        .toLowerCase();
+        }
+
+        return dataTypeName;
     }
 
 

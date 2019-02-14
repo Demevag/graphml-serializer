@@ -6,7 +6,7 @@
 
     <groupId>com.demevag</groupId>
     <artifactId>graphml-serializer</artifactId>
-    <version>1.021-SNAPSHOT</version>
+    <version>1.03-SNAPSHOT</version>
     <build>
         <plugins>
             <plugin>
