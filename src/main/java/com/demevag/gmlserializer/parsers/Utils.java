@@ -1,6 +1,7 @@
 package com.demevag.gmlserializer.parsers;
 
 import com.demevag.gmlserializer.annotations.*;
+import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -110,6 +111,13 @@ public class Utils
 
             if (fieldArgTypes.length > 2 || fieldArgTypes.length < 2)
                 throw new IllegalArgumentException("Map must have two generic types");
+
+            if(fieldArgTypes[1] instanceof TypeVariableImpl)
+            {
+                TypeVariableImpl typeVariable = (TypeVariableImpl) fieldArgTypes[1];
+                Type[] types = typeVariable.getBounds();
+                return (Class)types[0];
+            }
 
             return (Class) fieldArgTypes[1];
         }

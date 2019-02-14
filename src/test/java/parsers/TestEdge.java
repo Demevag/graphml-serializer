@@ -1,3 +1,5 @@
+package parsers;
+
 import com.demevag.gmlserializer.annotations.Edge;
 import com.demevag.gmlserializer.annotations.EdgeSource;
 import com.demevag.gmlserializer.annotations.EdgeTarget;
