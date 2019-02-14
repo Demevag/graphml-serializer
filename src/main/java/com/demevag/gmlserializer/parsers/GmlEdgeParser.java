@@ -56,9 +56,20 @@ public class GmlEdgeParser implements ElementParser
                 continue;
             }
             if (edgeField.isAnnotationPresent(EdgeSource.class))
-                edge.setSourceId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
-            else if (edgeField.isAnnotationPresent(EdgeTarget.class))
-                edge.setTargetId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
+            {
+                if (String.class.isAssignableFrom(edgeField.getType()))
+                    edge.setSourceId((String) Utils.getFieldData(edgeField, edgeObject));
+                else
+                    edge.setSourceId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
+            } else if (edgeField.isAnnotationPresent(EdgeTarget.class))
+            {
+                if (String.class.isAssignableFrom(edgeField.getType()))
+                    edge.setTargetId((String) Utils.getFieldData(edgeField, edgeObject));
+                else
+                    edge.setTargetId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
+            }
+            else if(edgeField.getName().contains("this"))
+                continue; //for using inner class in tests
             else
                 throw new IllegalArgumentException(edgeField.getName() + " is non-primitive");
         }
@@ -75,9 +86,9 @@ public class GmlEdgeParser implements ElementParser
     {
         List<GmlEdge> edges = new ArrayList<GmlEdge>();
 
-        for(Field field : fields)
+        for (Field field : fields)
         {
-            if(Utils.isEdge(field))
+            if (Utils.isEdge(field))
                 edges.add((GmlEdge) parse(field));
         }
 
