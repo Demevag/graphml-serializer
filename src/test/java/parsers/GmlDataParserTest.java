@@ -34,7 +34,7 @@ public class GmlDataParserTest
     }
 
     @BeforeEach
-    public void initNodeAndEdge()
+    public void init()
     {
         initNode();
         initParserForSimpleElements();
