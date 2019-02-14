@@ -43,7 +43,7 @@ public class GmlComplexDataParser implements ElementParser
 
         for(Field field : fields)
         {
-            String complexDataClassName = complexDataClass.getName().replace(complexDataClass.getPackage().getName()+".", "");
+            String complexDataClassName = Utils.getClassNameWithoutPackage(complexDataClass);
 
             String attrName = complexDataClassName + "_"+field.getName();
 

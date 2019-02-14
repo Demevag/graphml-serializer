@@ -31,7 +31,7 @@ public class GmlEdgeParser implements ElementParser
     {
         Class edgeClass = edgeObject.getClass();
 
-        String edgeClassName = edgeClass.getName().replace(edgeClass.getPackage().getName()+".", "");
+        String edgeClassName = Utils.getClassNameWithoutPackage(edgeClass);
 
         GmlEdge edge = new GmlEdge(edgeClassName, edgeType);
 
