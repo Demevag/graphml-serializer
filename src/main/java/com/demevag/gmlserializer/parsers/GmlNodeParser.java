@@ -27,7 +27,9 @@ public class GmlNodeParser implements ElementParser
     {
         Class nodeClass = nodeObject.getClass();
 
-        GmlNode node = new GmlNode(nodeClass.getName());
+        String nodeClassName = nodeClass.getName().replace(nodeClass.getPackage().getName()+".", "");
+
+        GmlNode node = new GmlNode(nodeClassName);
 
         Field[] nodeFields = nodeClass.getDeclaredFields();
 

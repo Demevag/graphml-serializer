@@ -62,7 +62,7 @@ public class GmlSerializer
         addGraph(graph, directives);
 
 
-        String xml = new Xembler( directives ).xml();
+        String xml = new Xembler(directives).xml();
 
         PrintWriter writer = new PrintWriter(outputStream);
 
@@ -142,7 +142,7 @@ public class GmlSerializer
             addDataElements(node.getDataAttributes(), directives);
             addComplexDataElements(node.getComplexDataAttributes(), directives);
 
-            for(GmlGraph subGraph : node.getSubGraphs())
+            for (GmlGraph subGraph : node.getSubGraphs())
                 addGraph(subGraph, directives);
 
             directives.up();
@@ -159,8 +159,8 @@ public class GmlSerializer
                     .attr("source", edge.getSourceId())
                     .attr("target", edge.getTargetId());
 
-            if(edge.getType() == GmlEdgeType.DIRECTED)
-                directives.attr("directed","true");
+            if (edge.getType() == GmlEdgeType.DIRECTED)
+                directives.attr("directed", "true");
 
             addDataElements(edge.getDataAttributes(), directives);
             addComplexDataElements(edge.getComplexDataAttributes(), directives);
@@ -171,19 +171,26 @@ public class GmlSerializer
 
     private void addComplexDataElements(List<GmlComplexData> complexDataAttributes, Directives directives)
     {
-        for(GmlComplexData complexData : complexDataAttributes)
+        for (GmlComplexData complexData : complexDataAttributes)
             addDataElements(complexData.getData(), directives);
     }
 
-    private void addDataElements(List<GmlData> dataAttributes,Directives directives)
+    private void addDataElements(List<GmlData> dataAttributes, Directives directives)
     {
         for (GmlData dataAttrib : dataAttributes)
         {
             directives
                     .add("data")
-                    .attr("key", dataAttrib.getKey().getId())
-                    .set(dataAttrib.getData().toString())
-                    .up();
+                    .attr("key", dataAttrib.getKey().getId());
+
+            if (dataAttrib.getData() != null)
+                directives
+                        .set(dataAttrib.getData().toString())
+                        .up();
+            else
+                directives
+                        .set("")
+                        .up();
         }
     }
 }

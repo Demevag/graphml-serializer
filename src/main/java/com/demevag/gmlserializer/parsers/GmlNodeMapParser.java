@@ -33,7 +33,11 @@ public class GmlNodeMapParser implements ContainerParser
         for (Object key : nodesMap.keySet())
         {
             GmlNode node = (GmlNode) nodeParser.parse(nodesMap.get(key));
-            node.setId(key.toString());
+
+            Class nodeClass = nodesMap.get(key).getClass();
+
+            String nodeClassName = nodeClass.getName().replace(nodeClass.getPackage().getName()+".", "");
+            node.setId(nodeClassName+"_"+key.toString());
 
             nodes.add(node);
         }

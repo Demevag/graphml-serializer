@@ -31,7 +31,9 @@ public class GmlEdgeParser implements ElementParser
     {
         Class edgeClass = edgeObject.getClass();
 
-        GmlEdge edge = new GmlEdge(edgeClass.getName(), edgeType);
+        String edgeClassName = edgeClass.getName().replace(edgeClass.getPackage().getName()+".", "");
+
+        GmlEdge edge = new GmlEdge(edgeClassName, edgeType);
 
         Field[] edgeFields = edgeClass.getDeclaredFields();
 
@@ -68,10 +70,6 @@ public class GmlEdgeParser implements ElementParser
                 else
                     edge.setTargetId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
             }
-            else if(edgeField.getName().contains("this"))
-                continue; //for using inner class in tests
-            else
-                throw new IllegalArgumentException(edgeField.getName() + " is non-primitive");
         }
         ;
 

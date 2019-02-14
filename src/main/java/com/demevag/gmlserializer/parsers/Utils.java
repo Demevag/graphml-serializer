@@ -54,7 +54,7 @@ public class Utils
 
     public static boolean isCollectionOfEdges(Field field)
     {
-        if(!isCollection(field))
+        if (!isCollection(field))
             return false;
 
         Class collectionArgClass = getCollectionArgClass(field);
@@ -64,7 +64,7 @@ public class Utils
 
     public static boolean isCollectionOfNodes(Field field)
     {
-        if(!isCollection(field))
+        if (!isCollection(field))
             return false;
 
         Class collectionArgClass = getCollectionArgClass(field);
@@ -74,7 +74,7 @@ public class Utils
 
     public static boolean isMapOfNodes(Field field)
     {
-        if(!isMap(field))
+        if (!isMap(field))
             return false;
 
         Class mapValClass = getMapValueClass(field);
@@ -112,11 +112,11 @@ public class Utils
             if (fieldArgTypes.length > 2 || fieldArgTypes.length < 2)
                 throw new IllegalArgumentException("Map must have two generic types");
 
-            if(fieldArgTypes[1] instanceof TypeVariableImpl)
+            if (fieldArgTypes[1] instanceof TypeVariableImpl)
             {
                 TypeVariableImpl typeVariable = (TypeVariableImpl) fieldArgTypes[1];
                 Type[] types = typeVariable.getBounds();
-                return (Class)types[0];
+                return (Class) types[0];
             }
 
             return (Class) fieldArgTypes[1];
@@ -155,8 +155,9 @@ public class Utils
         if (idOfField == null)
             throw new IllegalStateException(fieldClass.getName() + " doesn't contain id field");
 
-        String id = ( getFieldData(idOfField, getFieldData(field, object) ) ).toString();
+        String id = (getFieldData(idOfField, getFieldData(field, object))).toString();
 
+        id.replace(fieldClass.getPackage().getName(), "");
 
         return id;
     }
@@ -169,7 +170,7 @@ public class Utils
 
         Field idField = null;
 
-        for(Field field : fields)
+        for (Field field : fields)
         {
             if (field.isAnnotationPresent(Id.class) && idField == null)
                 idField = field;
@@ -177,7 +178,10 @@ public class Utils
                 throw new IllegalStateException(objectClass.getName() + " contains more than one id field");
         }
 
-        return (String)getFieldData(idField, object);
+        String id = (String) getFieldData(idField, object);
+
+        id.replace(objectClass.getPackage().getName(), "");
+        return id;
     }
 
     public static boolean isSubGraph(Field field)

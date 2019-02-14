@@ -43,7 +43,9 @@ public class GmlComplexDataParser implements ElementParser
 
         for(Field field : fields)
         {
-            String attrName = complexDataClass.getName() + "_"+field.getName();
+            String complexDataClassName = complexDataClass.getName().replace(complexDataClass.getPackage().getName()+".", "");
+
+            String attrName = complexDataClassName + "_"+field.getName();
 
             GmlKey key = new GmlKey(attrName+"_key", target, attrName);
             key.setAttrType(field.getType().getName());
