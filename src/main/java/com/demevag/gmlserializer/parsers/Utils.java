@@ -211,6 +211,14 @@ public class Utils
         return id;
     }
 
+    public static String getClassNameWithoutPackage(Class someClass)
+    {
+        if(someClass.getPackage() == null)
+            return someClass.getName();
+
+        return someClass.getName().replace(someClass.getPackage().getName()+".","");
+    }
+
     public static boolean isSubGraph(Field field)
     {
         return field.isAnnotationPresent(SubGraph.class);

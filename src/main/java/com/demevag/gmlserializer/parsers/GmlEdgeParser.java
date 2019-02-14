@@ -71,7 +71,9 @@ public class GmlEdgeParser implements ElementParser
                     edge.setSourceId(sourceNodeClassName+"_"+(String) Utils.getFieldData(edgeField, edgeObject));
                 }
                 else
-                    edge.setSourceId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
+                {
+                    edge.setSourceId(Utils.getClassNameWithoutPackage(edgeField.getType()) + "_" + Utils.getId(edgeField, edgeObject));
+                }
             } else if (edgeField.isAnnotationPresent(EdgeTarget.class))
             {
                 if (String.class.isAssignableFrom(edgeField.getType()))
@@ -86,7 +88,7 @@ public class GmlEdgeParser implements ElementParser
                     edge.setTargetId(targetNodeClassName+"_"+(String) Utils.getFieldData(edgeField, edgeObject));
                 }
                 else
-                    edge.setTargetId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
+                    edge.setTargetId(Utils.getClassNameWithoutPackage(edgeField.getType()) + "_" + Utils.getId(edgeField, edgeObject));
             }
         }
         ;
