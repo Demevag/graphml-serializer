@@ -24,11 +24,14 @@ public class GmlDataParser implements ElementParser
     @Override
     public GmlElement parse(Field field) throws IllegalAccessException
     {
+        if(!Utils.isDataField(field))
+            throw new IllegalArgumentException(field.getName()+" isn't primitive or string");
+
         GmlKey dataKey = new GmlKey(field.getName() + "_key", target, field.getName());
 
         Object data = Utils.getFieldData(field, parentObject);
 
-        dataKey.setAttrType(Utils.getDataType(data));
+        dataKey.setAttrType(Utils.getDataType(field.getType()));
 
         return new GmlData(dataKey, data);
     }
@@ -46,14 +49,11 @@ public class GmlDataParser implements ElementParser
 
         for(Field field : fields)
         {
-            if(field.isAnnotationPresent(Ignore.class))
-                continue;
-            if(Utils.isIdField(field))
-                continue;
-            if (Utils.isPrimitiveOrString(field))
+            if (Utils.isDataField(field))
                 dataAttributes.add((GmlData)parse(field));
         }
 
         return dataAttributes;
     }
+
 }

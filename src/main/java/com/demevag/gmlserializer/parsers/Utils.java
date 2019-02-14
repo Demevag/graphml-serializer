@@ -13,8 +13,6 @@ public class Utils
 {
     public static String getDataType(Object data)
     {
-        String dataTypeName = "string";
-
         Class dataClass = data.getClass();
 
         return getDataType(dataClass);
@@ -46,6 +44,14 @@ public class Utils
     public static boolean isIdField(Field field)
     {
         return isPrimitiveOrString(field) && field.isAnnotationPresent(Id.class);
+    }
+
+    public static boolean isDataField(Field field)
+    {
+
+        return !field.isAnnotationPresent(Ignore.class)
+                && !isIdField(field)
+                && isPrimitiveOrString(field);
     }
 
     public static boolean isNode(Field field)
