@@ -60,13 +60,31 @@ public class GmlEdgeParser implements ElementParser
             if (edgeField.isAnnotationPresent(EdgeSource.class))
             {
                 if (String.class.isAssignableFrom(edgeField.getType()))
-                    edge.setSourceId((String) Utils.getFieldData(edgeField, edgeObject));
+                {
+                    EdgeSource edgeSourceAnnotaition = edgeField.getAnnotation(EdgeSource.class);
+
+                    String sourceNodeClassName = edgeSourceAnnotaition.nodeClassName();
+
+                    if(sourceNodeClassName.equals(""))
+                        throw new IllegalStateException("Can't resolve node class name for "+edgeField.getName());
+
+                    edge.setSourceId(sourceNodeClassName+"_"+(String) Utils.getFieldData(edgeField, edgeObject));
+                }
                 else
                     edge.setSourceId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
             } else if (edgeField.isAnnotationPresent(EdgeTarget.class))
             {
                 if (String.class.isAssignableFrom(edgeField.getType()))
-                    edge.setTargetId((String) Utils.getFieldData(edgeField, edgeObject));
+                {
+                    EdgeTarget edgeTargetAnnotation = edgeField.getAnnotation(EdgeTarget.class);
+
+                    String targetNodeClassName = edgeTargetAnnotation.nodeClassName();
+
+                    if(targetNodeClassName.equals(""))
+                        throw new IllegalStateException("Can't resolve node class name for "+edgeField.getName());
+
+                    edge.setTargetId(targetNodeClassName+"_"+(String) Utils.getFieldData(edgeField, edgeObject));
+                }
                 else
                     edge.setTargetId(edgeField.getType().getName() + "_" + Utils.getId(edgeField, edgeObject));
             }
