@@ -7,9 +7,9 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class GmlDeserializer
 
         keys = new HashMap<String, GmlKey>();
 
-        for(Element keyElement : root.getChildren("key", Namespace.getNamespace("http://graphml.graphdrawing.org/xmlns")))
+        for (Element keyElement : root.getChildren("key", Namespace.getNamespace("http://graphml.graphdrawing.org/xmlns")))
         {
             GmlKey key = parseKey(keyElement);
 
@@ -58,14 +58,14 @@ public class GmlDeserializer
 
         GmlGraph graph = new GmlGraph(graphId, GmlEdgeType.valueOf(defaultEdgeTypeName.toUpperCase()));
 
-        for(Element graphElement : element.getChildren())
+        for (Element graphElement : element.getChildren())
         {
-            if(graphElement.getName().equals("node"))
+            if (graphElement.getName().equals("node"))
                 graph.addNode(parseNode(graphElement));
-            else if(graphElement.getName().equals("edge") )
+            else if (graphElement.getName().equals("edge"))
                 graph.addEdge(parseEdge(graphElement));
             else
-                throw new IllegalStateException("Unknown element inside graph: "+graphElement.getName());
+                throw new IllegalStateException("Unknown element inside graph: " + graphElement.getName());
         }
 
         return graph;
@@ -81,20 +81,29 @@ public class GmlDeserializer
 
         GmlEdgeType edgeType = GmlEdgeType.UNDIRECTED;
 
-        if(edgeIsDirected != null && edgeIsDirected.equals("true") )
+        if (edgeIsDirected != null && edgeIsDirected.equals("true"))
             edgeType = GmlEdgeType.DIRECTED;
 
         GmlEdge edge = new GmlEdge(edgeId, edgeType);
         edge.setSourceId(sourceId);
         edge.setTargetId(targetId);
 
-        for(Element edgeElement : element.getChildren())
+        List<Element> elementsWithComplexData = new ArrayList<>();
+
+        for (Element edgeElement : element.getChildren())
         {
-            if(edgeElement.getName().equals("data") )
-                edge.addDataAttribute(parseData(edgeElement));
-            else
-                throw new IllegalStateException("Unknown element inside edge: "+edgeElement.getName());
+            if (edgeElement.getName().equals("data"))
+            {
+                if (edgeElement.getAttributeValue("key").contains("c:"))
+                {
+                    elementsWithComplexData.add(edgeElement);
+                } else
+                    edge.addDataAttribute(parseData(edgeElement));
+            } else
+                throw new IllegalStateException("Unknown element inside edge: " + edgeElement.getName());
         }
+
+        edge.addComplexDataAttribute(parseComplexDataElements(elementsWithComplexData));
 
         return edge;
     }
@@ -105,17 +114,81 @@ public class GmlDeserializer
 
         GmlNode node = new GmlNode(nodeId);
 
-        for(Element nodeElement : element.getChildren())
+        List<Element> elementsWithComplexData = new ArrayList<>();
+
+        for (Element nodeElement : element.getChildren())
         {
-            if(nodeElement.getName().equals("data") )
-                node.addDataAttribute(parseData(nodeElement));
-            else if(nodeElement.getName().equals("graph") )
+            if (nodeElement.getName().equals("data"))
+            {
+                if (nodeElement.getAttributeValue("key").contains("c:"))
+                {
+                    elementsWithComplexData.add(nodeElement);
+                } else
+                    node.addDataAttribute(parseData(nodeElement));
+            } else if (nodeElement.getName().equals("graph"))
                 node.addSubGraph(parseGraph(nodeElement));
             else
-                throw new IllegalStateException("Unknown element inside node: "+nodeElement.getName());
+                throw new IllegalStateException("Unknown element inside node: " + nodeElement.getName());
         }
 
+        node.addComplexDataAttribute(parseComplexDataElements(elementsWithComplexData));
+
         return node;
+    }
+
+    private List<GmlComplexData> parseComplexDataElements(List<Element> elements) throws ClassNotFoundException
+    {
+        if(elements.size() == 0)
+            return new ArrayList<>();
+
+        String firstElementKey = elements.get(0).getAttributeValue("key");
+
+        String className =firstElementKey .split("_")[0];
+        String suffix = "";
+
+        if(firstElementKey.matches(".*#[0-9]+"))
+            suffix ="#" + firstElementKey.split("#")[1];
+
+        List<GmlComplexData> result = new ArrayList<>();
+
+        List<Element> currentComplexData = new ArrayList<>();
+
+        for(Element element : elements)
+        {
+            String elementKey = element.getAttributeValue("key");
+
+            if(elementKey.matches(className+"_.+_key"+suffix))
+                currentComplexData.add(element);
+            else
+            {
+                result.add(parseComplexData(currentComplexData));
+
+                currentComplexData.clear();
+                currentComplexData.add(element);
+
+                className =elementKey .split("_")[0];
+                suffix = "";
+
+                if(elementKey.matches(".*#[0-9]+"))
+                    suffix ="#" + elementKey.split("#")[1];
+            }
+        }
+
+        result.add(parseComplexData(currentComplexData));
+
+        return result;
+    }
+
+    private GmlComplexData parseComplexData(List<Element> elements) throws ClassNotFoundException
+    {
+        GmlComplexData complexData = new GmlComplexData();
+
+        for(Element element : elements)
+        {
+            complexData.addDataAttribute(parseData(element));
+        }
+
+        return complexData;
     }
 
     private GmlData parseData(Element element) throws ClassNotFoundException
@@ -124,33 +197,70 @@ public class GmlDeserializer
 
         GmlData dataAttribute = new GmlData(keys.get(keyId));
 
-        Class dataClass = Class.forName(keys.get(keyId).getAttrType());
+        Class dataClass = getClassFromGmlType(keys.get(keyId).getAttrType());
 
-        Object data =castFromString(element.getValue(), dataClass);
+        Object data = castFromString(element.getValue(), dataClass);
 
         dataAttribute.setData(data);
 
         return dataAttribute;
     }
 
+    private Class getClassFromGmlType(String gmlTypeName) throws ClassNotFoundException
+    {
+        if (gmlTypeName.equals("string"))
+            return String.class;
+
+        if (gmlTypeName.equals("byte"))
+            return byte.class;
+        if (gmlTypeName.equals("short"))
+            return short.class;
+        if (gmlTypeName.equals("int"))
+            return int.class;
+        if (gmlTypeName.equals("long"))
+            return long.class;
+        if (gmlTypeName.equals("char"))
+            return char.class;
+        if (gmlTypeName.equals("float"))
+            return float.class;
+        if (gmlTypeName.equals("double"))
+            return double.class;
+        if (gmlTypeName.equals("boolean"))
+            return boolean.class;
+        if (gmlTypeName.equals("void"))
+            return void.class;
+
+        throw new IllegalArgumentException("Not primitive type : " + gmlTypeName);
+
+    }
+
     private Object castFromString(String value, Class dataClass)
     {
-        if(String.class.isAssignableFrom(dataClass))
+        if (String.class.isAssignableFrom(dataClass))
             return value;
 
-        if(Integer.class.isAssignableFrom(dataClass))
+        if (int.class.isAssignableFrom(dataClass))
             return Integer.parseInt(value);
 
-        if(Long.class.isAssignableFrom(dataClass))
+        if (long.class.isAssignableFrom(dataClass))
             return Long.parseLong(value);
 
-        if(Short.class.isAssignableFrom(dataClass))
+        if (short.class.isAssignableFrom(dataClass))
             return Short.parseShort(value);
 
-        if(Float.class.isAssignableFrom(dataClass))
+        if (byte.class.isAssignableFrom(dataClass))
+            return Byte.parseByte(value);
+
+        if (char.class.isAssignableFrom(dataClass))
+            return value.toCharArray()[0];
+
+        if (boolean.class.isAssignableFrom(dataClass))
+            return Boolean.parseBoolean(value);
+
+        if (float.class.isAssignableFrom(dataClass))
             return Float.parseFloat(value);
 
-        if(Double.class.isAssignableFrom(dataClass))
+        if (double.class.isAssignableFrom(dataClass))
             return Double.parseDouble(value);
 
         return null;
