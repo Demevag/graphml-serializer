@@ -4,10 +4,10 @@ import com.demevag.gmlserializer.elements.GmlElement;
 
 import java.lang.reflect.Field;
 
-public abstract class ElementConvertor
+public  abstract class ElementConvertor <T extends GmlElement>
 {
 
-    public Object convert(Class elementClass, GmlElement gmlElement) throws IllegalAccessException, InstantiationException
+    public Object convert(Class elementClass, T gmlElement) throws IllegalAccessException, InstantiationException
     {
         Object elementObject = elementClass.newInstance();
 
@@ -28,6 +28,6 @@ public abstract class ElementConvertor
         return convertSpecificFields(elementObject, elementFields, gmlElement);
     }
 
-    public abstract Object convertSpecificFields(Object elementObject, Field[] fields, GmlElement gmlElement);
-    public abstract GmlElement extractGmlElementForFieldType(GmlElement gmlElement, FieldType fieldType);
+    protected abstract Object convertSpecificFields(Object elementObject, Field[] fields, T gmlElement);
+    protected abstract GmlElement extractGmlElementForFieldType(T gmlElement, FieldType fieldType);
 }

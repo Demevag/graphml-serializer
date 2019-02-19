@@ -1,19 +1,26 @@
 package com.demevag.gmlserializer.convertors;
 
+import com.demevag.gmlserializer.elements.GmlData;
 import com.demevag.gmlserializer.elements.GmlElement;
 
 import java.lang.reflect.Field;
 
-public class GmlDataConvertor extends ElementConvertor
+public class GmlDataConvertor extends ElementConvertor<GmlData>
 {
     @Override
-    public Object convertSpecificFields(Object elementObject, Field[] fields, GmlElement gmlElement)
+    public Object convert(Class fieldsClass, GmlData gmlData)
     {
-        return null;
+        return gmlData.getData();
     }
 
     @Override
-    public GmlElement extractGmlElementForFieldType(GmlElement gmlElement, FieldType fieldType)
+    protected Object convertSpecificFields(Object elementObject, Field[] fields, GmlData gmlData)
+    {
+        return gmlData.getData();
+    }
+
+    @Override
+    protected GmlElement extractGmlElementForFieldType(GmlData gmlElement, FieldType fieldType)
     {
         return null;
     }
