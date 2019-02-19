@@ -8,7 +8,7 @@ import com.demevag.gmlserializer.parsers.Utils;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class Resolver
+public class Convertor
 {
     private Map<String, Object> resolvedNodes = new HashMap<>();
     private Set<Object> nodesWithEdgesInside = new HashSet<>();
