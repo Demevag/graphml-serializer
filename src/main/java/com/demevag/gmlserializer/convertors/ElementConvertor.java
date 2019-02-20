@@ -18,14 +18,22 @@ public  abstract class ElementConvertor <T extends GmlElement>
             FieldType fieldType = FieldType.getFieldType(field);
 
             ElementConvertor convertor = ElementConvertorsFactory.getConvertorForField(fieldType);
-            ElementSetter setter = ElementSettersFactory.getSetterForField(fieldType);
 
             GmlElement elementForFieldConvertor = extractGmlElementForFieldType(gmlElement, fieldType, field);
 
-            setter.set(elementObject, field, convertor.convert(field.getType(), elementForFieldConvertor));
+            set(elementObject, field, convertor.convert(field.getType(), elementForFieldConvertor));
         }
 
         return convertSpecificFields(elementObject, elementFields, gmlElement);
+    }
+
+    private void set(Object parentObject, Field field, Object data) throws IllegalAccessException
+    {
+        field.setAccessible(true);
+
+        field.set(parentObject, data);
+
+        field.setAccessible(false);
     }
 
     protected abstract Object convertSpecificFields(Object elementObject, Field[] fields, T gmlElement);

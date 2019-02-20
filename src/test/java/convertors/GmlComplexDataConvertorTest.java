@@ -31,7 +31,17 @@ public class GmlComplexDataConvertorTest
 
         GmlComplexDataConvertor convertor = new GmlComplexDataConvertor();
 
-        TestObject testObject = (TestObject) convertor.convert(TestObject.class, complexData);
+        TestObject testObject = null;
+        try
+        {
+            testObject = (TestObject) convertor.convert(TestObject.class, complexData);
+        } catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        } catch (InstantiationException e)
+        {
+            e.printStackTrace();
+        }
 
         assertEquals(1337, testObject.getIntValue());
         assertEquals("I'm a string", testObject.getStringValue());
@@ -53,19 +63,5 @@ public class GmlComplexDataConvertorTest
         GmlComplexDataConvertor convertor = new GmlComplexDataConvertor();
 
         assertThrows(IllegalArgumentException.class, ()->convertor.convert(TestExceptionObject.class, new GmlComplexData()));
-    }
-
-    @Data
-    public class TestObject
-    {
-        private int intValue;
-        private String stringValue;
-    }
-
-    @Data
-    public class TestExceptionObject
-    {
-        @ComplexData
-        private Integer integerValue;
     }
 }
