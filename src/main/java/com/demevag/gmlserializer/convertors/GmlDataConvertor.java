@@ -4,6 +4,7 @@ import com.demevag.gmlserializer.elements.GmlData;
 import com.demevag.gmlserializer.elements.GmlElement;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class GmlDataConvertor extends ElementConvertor<GmlData>
 {
@@ -14,7 +15,7 @@ public class GmlDataConvertor extends ElementConvertor<GmlData>
     }
 
     @Override
-    protected Object convertSpecificFields(Object elementObject, Field[] fields, GmlData gmlData)
+    protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlData gmlData)
     {
         return gmlData.getData();
     }

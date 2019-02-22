@@ -6,11 +6,12 @@ import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.elements.GmlKey;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class GmlComplexDataConvertor extends ElementConvertor<GmlComplexData>
 {
     @Override
-    protected Object convertSpecificFields(Object elementObject, Field[] fields, GmlComplexData gmlComplexData)
+    protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlComplexData gmlComplexData)
     {
         return elementObject;
     }

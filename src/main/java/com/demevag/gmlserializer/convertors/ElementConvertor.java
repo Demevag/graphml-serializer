@@ -3,6 +3,9 @@ package com.demevag.gmlserializer.convertors;
 import com.demevag.gmlserializer.elements.GmlElement;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public  abstract class ElementConvertor <T extends GmlElement>
 {
@@ -11,7 +14,9 @@ public  abstract class ElementConvertor <T extends GmlElement>
     {
         Object elementObject = elementClass.newInstance();
 
-        Field[] elementFields = elementClass.getDeclaredFields();
+        List<Field> elementFields = new ArrayList<>(Arrays.asList(elementClass.getDeclaredFields()));
+
+        elementObject = convertSpecificFields(elementObject, elementFields, gmlElement);
 
         for(Field field : elementFields)
         {
@@ -24,10 +29,10 @@ public  abstract class ElementConvertor <T extends GmlElement>
             set(elementObject, field, convertor.convert(field.getType(), elementForFieldConvertor));
         }
 
-        return convertSpecificFields(elementObject, elementFields, gmlElement);
+        return elementObject;
     }
 
-    private void set(Object parentObject, Field field, Object data) throws IllegalAccessException
+    protected void set(Object parentObject, Field field, Object data) throws IllegalAccessException
     {
         field.setAccessible(true);
 
@@ -36,6 +41,6 @@ public  abstract class ElementConvertor <T extends GmlElement>
         field.setAccessible(false);
     }
 
-    protected abstract Object convertSpecificFields(Object elementObject, Field[] fields, T gmlElement);
+    protected abstract Object convertSpecificFields(Object elementObject, List<Field> fields, T gmlElement) throws IllegalAccessException;
     protected abstract GmlElement extractGmlElementForFieldType(T gmlElement, FieldType fieldType, Field field);
 }

@@ -8,6 +8,7 @@ public class ElementConvertorsFactory
         {
             case DATA: return new GmlDataConvertor();
             case COMPLEX_DATA: return new GmlComplexDataConvertor();
+            case ID: return new GmlDataConvertor();
         }
         return null;
     }

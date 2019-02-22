@@ -13,7 +13,8 @@ public enum FieldType
     COMPLEX_DATA,
     NODE_COLLECTION,
     EDGE_COLLECTION,
-    NODE_MAP;
+    NODE_MAP,
+    ID;
 
     public static FieldType getFieldType(Field field)
     {
@@ -37,6 +38,9 @@ public enum FieldType
 
         if(Utils.isMapOfNodes(field))
             return FieldType.NODE_MAP;
+
+        if(Utils.isIdField(field))
+            return FieldType.ID;
 
         throw new IllegalArgumentException("Unknown type of field "+field.getName());
     }
