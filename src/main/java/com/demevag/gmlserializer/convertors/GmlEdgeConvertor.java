@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GmlEdgeConvertor extends ElementConvertor<GmlEdge>
+public class GmlEdgeConvertor extends ElementConvertor<GmlEdge, GmlElement>
 {
     @Override
     protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlEdge gmlEdge) throws IllegalAccessException
