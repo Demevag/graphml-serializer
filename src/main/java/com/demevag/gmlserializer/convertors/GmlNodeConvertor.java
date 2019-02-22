@@ -51,7 +51,7 @@ public class GmlNodeConvertor extends ElementConvertor<GmlNode, GmlGraph>
             }
         }
 
-        throw new IllegalArgumentException("Edge class can't contain "+fieldType.name()+" field");
+        throw new IllegalArgumentException("Node class can't contain "+fieldType.name()+" field");
     }
 
     @Override
