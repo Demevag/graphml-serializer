@@ -16,15 +16,15 @@ public class GmlGraphConvertor extends ElementConvertor<GmlGraph, GmlElement>
     }
 
     @Override
-    protected GmlElement extractGmlElementForFieldType(GmlGraph gmlElement, FieldType fieldType, Field field)
+    protected GmlElement extractGmlElementForFieldType(GmlGraph gmlElement, ElementType elementType, Field field)
     {
-        throw new IllegalArgumentException("Graph class can't contain "+fieldType.name()+" field");
+        throw new IllegalArgumentException("Graph class can't contain "+ elementType.name()+" field");
     }
 
     @Override
-    protected List<GmlElement> extractGmlElementsForContainerField(GmlGraph gmlGraph, FieldType fieldType, Field containerField, GmlElement parentElement)
+    protected List<GmlElement> extractGmlElementsForContainerField(GmlGraph gmlGraph, ContainerType elementType, Field containerField, GmlElement parentElement)
     {
-        switch (fieldType)
+        switch (elementType)
         {
             case NODE_COLLECTION:{
                 return new ArrayList<>(gmlGraph.getNodes());
@@ -37,6 +37,6 @@ public class GmlGraphConvertor extends ElementConvertor<GmlGraph, GmlElement>
             }
         }
 
-        throw new IllegalStateException("Graph can't contain "+fieldType.name());
+        throw new IllegalStateException("Graph can't contain "+ elementType.name());
     }
 }

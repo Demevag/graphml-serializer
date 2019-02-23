@@ -2,10 +2,7 @@ package convertors;
 
 import com.demevag.gmlserializer.annotations.ComplexData;
 import com.demevag.gmlserializer.convertors.GmlComplexDataConvertor;
-import com.demevag.gmlserializer.elements.GmlComplexData;
-import com.demevag.gmlserializer.elements.GmlData;
-import com.demevag.gmlserializer.elements.GmlKey;
-import com.demevag.gmlserializer.elements.GmlKeyTarget;
+import com.demevag.gmlserializer.elements.*;
 import lombok.Data;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +31,7 @@ public class GmlComplexDataConvertorTest
         TestObject testObject = null;
         try
         {
-            testObject = (TestObject) convertor.convert(TestObject.class, complexData);
+            testObject = (TestObject) convertor.convert(TestObject.class, complexData, new GmlNode("id"));
         } catch (IllegalAccessException e)
         {
             e.printStackTrace();
@@ -53,7 +50,7 @@ public class GmlComplexDataConvertorTest
     {
         GmlComplexDataConvertor convertor = new GmlComplexDataConvertor();
 
-        assertThrows(IllegalStateException.class, ()-> convertor.convert(TestObject.class, new GmlComplexData()));
+        assertThrows(IllegalStateException.class, ()-> convertor.convert(TestObject.class, new GmlComplexData(), new GmlNode("id")));
     }
 
     @Test
@@ -62,6 +59,6 @@ public class GmlComplexDataConvertorTest
     {
         GmlComplexDataConvertor convertor = new GmlComplexDataConvertor();
 
-        assertThrows(IllegalArgumentException.class, ()->convertor.convert(TestExceptionObject.class, new GmlComplexData()));
+        assertThrows(IllegalArgumentException.class, ()->convertor.convert(TestExceptionObject.class, new GmlComplexData(), new GmlNode("id")));
     }
 }

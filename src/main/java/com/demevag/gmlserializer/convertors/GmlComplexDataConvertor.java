@@ -17,9 +17,9 @@ public class GmlComplexDataConvertor extends ElementConvertor<GmlComplexData, Gm
     }
 
     @Override
-    protected GmlElement extractGmlElementForFieldType(GmlComplexData gmlComplexData, FieldType fieldType, Field field)
+    protected GmlElement extractGmlElementForFieldType(GmlComplexData gmlComplexData, ElementType elementType, Field field)
     {
-        if(fieldType == FieldType.DATA)
+        if(elementType == ElementType.DATA)
         {
             String fieldName = field.getName();
 
@@ -34,6 +34,6 @@ public class GmlComplexDataConvertor extends ElementConvertor<GmlComplexData, Gm
             throw new IllegalStateException("No data for "+fieldName);
         }
 
-        throw new IllegalArgumentException("Complex data class can't contain "+fieldType.name()+" in field "+field.getName());
+        throw new IllegalArgumentException("Complex data class can't contain "+ elementType.name()+" in field "+field.getName());
     }
 }

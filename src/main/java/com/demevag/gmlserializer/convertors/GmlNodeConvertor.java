@@ -17,11 +17,11 @@ public class GmlNodeConvertor extends ElementConvertor<GmlNode, GmlGraph>
 
     //todo: fix repeating
     @Override
-    protected GmlElement extractGmlElementForFieldType(GmlNode gmlNode, FieldType fieldType, Field field)
+    protected GmlElement extractGmlElementForFieldType(GmlNode gmlNode, ElementType elementType, Field field)
     {
         String fieldName = field.getName();
 
-        switch (fieldType)
+        switch (elementType)
         {
             case DATA:{
                 for(GmlData gmlData : gmlNode.getDataAttributes())
@@ -51,13 +51,13 @@ public class GmlNodeConvertor extends ElementConvertor<GmlNode, GmlGraph>
             }
         }
 
-        throw new IllegalArgumentException("Node class can't contain "+fieldType.name()+" field");
+        throw new IllegalArgumentException("Node class can't contain "+ elementType.name()+" field");
     }
 
     @Override
-    protected List<GmlElement> extractGmlElementsForContainerField(GmlNode gmlNode, FieldType fieldType, Field containerField, GmlGraph parentElement)
+    protected List<GmlElement> extractGmlElementsForContainerField(GmlNode gmlNode, ContainerType elementType, Field containerField, GmlGraph parentElement)
     {
-        switch (fieldType)
+        switch (elementType)
         {
             case EDGE_COLLECTION:{
                 List<GmlElement> edges = new ArrayList<>();
@@ -78,6 +78,6 @@ public class GmlNodeConvertor extends ElementConvertor<GmlNode, GmlGraph>
             }
         }
 
-        throw new IllegalStateException("Node can't contain "+fieldType.name());
+        throw new IllegalStateException("Node can't contain "+ elementType.name());
     }
 }

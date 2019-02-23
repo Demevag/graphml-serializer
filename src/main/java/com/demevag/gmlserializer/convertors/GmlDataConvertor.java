@@ -21,7 +21,7 @@ public class GmlDataConvertor extends ElementConvertor<GmlData, GmlElement>
     }
 
     @Override
-    protected GmlElement extractGmlElementForFieldType(GmlData gmlElement, FieldType fieldType, Field field)
+    protected GmlElement extractGmlElementForFieldType(GmlData gmlElement, ElementType elementType, Field field)
     {
         return null;
     }

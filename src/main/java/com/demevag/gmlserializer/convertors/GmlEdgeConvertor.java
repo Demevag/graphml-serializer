@@ -43,11 +43,11 @@ public class GmlEdgeConvertor extends ElementConvertor<GmlEdge, GmlElement>
     }
 
     @Override
-    protected GmlElement extractGmlElementForFieldType(GmlEdge gmlEdge, FieldType fieldType, Field field)
+    protected GmlElement extractGmlElementForFieldType(GmlEdge gmlEdge, ElementType elementType, Field field)
     {
         String fieldName = field.getName();
 
-        switch (fieldType)
+        switch (elementType)
         {
             case DATA:{
                 for(GmlData gmlData : gmlEdge.getDataAttributes())
@@ -77,6 +77,6 @@ public class GmlEdgeConvertor extends ElementConvertor<GmlEdge, GmlElement>
             }
         }
 
-        throw new IllegalArgumentException("Edge class can't contain "+fieldType.name()+" field");
+        throw new IllegalArgumentException("Edge class can't contain "+ elementType.name()+" field");
     }
 }

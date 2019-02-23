@@ -36,7 +36,7 @@ public class GmlEdgeConvertorTest
         TestEdge testEdge = null;
         try
         {
-            testEdge = (TestEdge) convertor.convert(TestEdge.class, gmlEdge);
+            testEdge = (TestEdge) convertor.convert(TestEdge.class, gmlEdge, new GmlNode("id"));
         } catch (IllegalAccessException e)
         {
             e.printStackTrace();

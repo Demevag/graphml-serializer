@@ -21,21 +21,24 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
 
         for(Field field : elementFields)
         {
-            FieldType fieldType = FieldType.getFieldType(field);
-
             if(Utils.isCollection(field) || Utils.isMap(field))
             {
-                ContainerConvertor convertor = ContainerConvertorsFactory.getConvetrorForFieldType(fieldType);
+                ContainerType containerType = ContainerType.getTypeForField(field);
 
-                List<GmlElement> elementsForContainerConvertor = extractGmlElementsForContainerField(gmlElement, fieldType, field, parentElement);
+                ContainerConvertor convertor = ContainerConvertorsFactory.getConvetrorForFieldType(containerType);
 
-                set(elementObject, field, convertor.convert(field.getType(), elementsForContainerConvertor, gmlElement));
+                List<GmlElement> elementsForContainerConvertor = extractGmlElementsForContainerField(gmlElement, containerType, field, parentElement);
+
+                set(elementObject, field, convertor.convert(field, elementsForContainerConvertor, gmlElement));
             }
             else
             {
-                ElementConvertor convertor = ElementConvertorsFactory.getConvertorForField(fieldType);
 
-                GmlElement elementForFieldConvertor = extractGmlElementForFieldType(gmlElement, fieldType, field);
+                ElementType elementType = ElementType.getTypeForField(field);
+
+                ElementConvertor convertor = ElementConvertorsFactory.getConvertorForField(elementType);
+
+                GmlElement elementForFieldConvertor = extractGmlElementForFieldType(gmlElement, elementType, field);
 
                 set(elementObject, field, convertor.convert(field.getType(), elementForFieldConvertor, gmlElement));
             }
@@ -54,9 +57,9 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
     }
 
     protected abstract Object convertSpecificFields(Object elementObject, List<Field> fields, T gmlElement) throws IllegalAccessException;
-    protected abstract GmlElement extractGmlElementForFieldType(T gmlElement, FieldType fieldType, Field field);
+    protected abstract GmlElement extractGmlElementForFieldType(T gmlElement, ElementType elementType, Field field);
 
-    protected List<GmlElement> extractGmlElementsForContainerField(T gmlElement, FieldType fieldType, Field containerField, P parentElement)
+    protected List<GmlElement> extractGmlElementsForContainerField(T gmlElement, ContainerType containerType, Field containerField, P parentElement)
     {
         throw new IllegalStateException(this.getClass().getName() + " should't contain any containers");
     }
