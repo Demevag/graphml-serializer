@@ -1,4 +1,4 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.parsers.Utils;
@@ -25,7 +25,7 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
             {
                 ContainerType containerType = ContainerType.getTypeForField(field);
 
-                ContainerConvertor convertor = ContainerConvertersFactory.getConverterForFieldType(containerType);
+                ContainerConverter convertor = ContainerConvertersFactory.getConverterForFieldType(containerType);
 
                 List<GmlElement> elementsForContainerConvertor = extractGmlElementsForContainerField(gmlElement, containerType, field, parentElement);
 
@@ -36,7 +36,7 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
 
                 ElementType elementType = ElementType.getTypeForField(field);
 
-                ElementConvertor convertor = ElementConvertorsFactory.getConvertorForField(elementType);
+                ElementConvertor convertor = ElementConvertersFactory.getConvertorForField(elementType);
 
                 GmlElement elementForFieldConvertor = extractGmlElementForFieldType(gmlElement, elementType, field);
 

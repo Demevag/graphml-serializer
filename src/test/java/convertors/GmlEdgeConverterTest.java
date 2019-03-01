@@ -1,6 +1,6 @@
 package convertors;
 
-import com.demevag.gmlserializer.convertors.GmlEdgeConvertor;
+import com.demevag.gmlserializer.converters.GmlEdgeConverter;
 import com.demevag.gmlserializer.elements.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GmlEdgeConvertorTest
+public class GmlEdgeConverterTest
 {
     @Test
     @DisplayName("Should convert gmlEdge to Edge object")
@@ -31,7 +31,7 @@ public class GmlEdgeConvertorTest
         gmlEdge.addDataAttribute(stringData);
         gmlEdge.addComplexDataAttribute(complexData);
 
-        GmlEdgeConvertor convertor = new GmlEdgeConvertor();
+        GmlEdgeConverter convertor = new GmlEdgeConverter();
 
         TestEdge testEdge = null;
         try

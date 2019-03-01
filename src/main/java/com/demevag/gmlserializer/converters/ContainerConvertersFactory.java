@@ -1,8 +1,8 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
 public class ContainerConvertersFactory
 {
-    public static ContainerConvertor getConverterForFieldType(ContainerType containerType)
+    public static ContainerConverter getConverterForFieldType(ContainerType containerType)
     {
         switch (containerType)
         {

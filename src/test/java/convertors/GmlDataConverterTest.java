@@ -1,6 +1,6 @@
 package convertors;
 
-import com.demevag.gmlserializer.convertors.GmlDataConvertor;
+import com.demevag.gmlserializer.converters.GmlDataConverter;
 import com.demevag.gmlserializer.elements.GmlData;
 import com.demevag.gmlserializer.elements.GmlKey;
 import com.demevag.gmlserializer.elements.GmlKeyTarget;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GmlDataConvertorTest
+public class GmlDataConverterTest
 {
     @Test
     @DisplayName("Should just return data from GmlData")
@@ -19,7 +19,7 @@ public class GmlDataConvertorTest
         GmlKey gmlKey = new GmlKey("id", GmlKeyTarget.NODE, "attrName");
         GmlData gmlData = new GmlData(gmlKey, "String data");
 
-        GmlDataConvertor dataConvertor = new GmlDataConvertor();
+        GmlDataConverter dataConvertor = new GmlDataConverter();
 
         assertEquals("String data", dataConvertor.convert(String.class, gmlData, new GmlNode("id")), "For String field");
 

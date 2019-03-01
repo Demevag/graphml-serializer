@@ -1,4 +1,4 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.elements.GmlComplexData;
 import com.demevag.gmlserializer.elements.GmlData;
@@ -8,7 +8,7 @@ import com.demevag.gmlserializer.elements.GmlKey;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class GmlComplexDataConvertor extends ElementConvertor<GmlComplexData, GmlElement>
+public class GmlComplexDataConverter extends ElementConvertor<GmlComplexData, GmlElement>
 {
     @Override
     protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlComplexData gmlComplexData)

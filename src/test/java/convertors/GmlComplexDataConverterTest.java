@@ -1,9 +1,7 @@
 package convertors;
 
-import com.demevag.gmlserializer.annotations.ComplexData;
-import com.demevag.gmlserializer.convertors.GmlComplexDataConvertor;
+import com.demevag.gmlserializer.converters.GmlComplexDataConverter;
 import com.demevag.gmlserializer.elements.*;
-import lombok.Data;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +9,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GmlComplexDataConvertorTest
+public class GmlComplexDataConverterTest
 {
     @Test
     @DisplayName("Should convert GmlComplexData to object")
@@ -26,7 +24,7 @@ public class GmlComplexDataConvertorTest
         GmlComplexData complexData = new GmlComplexData();
         complexData.addDataAttribute(Arrays.asList(intData, stringData));
 
-        GmlComplexDataConvertor convertor = new GmlComplexDataConvertor();
+        GmlComplexDataConverter convertor = new GmlComplexDataConverter();
 
         TestObject testObject = null;
         try
@@ -48,7 +46,7 @@ public class GmlComplexDataConvertorTest
     @DisplayName("Should throw exception if no data for field")
     public void shouldThrowExceptionIfNoData()
     {
-        GmlComplexDataConvertor convertor = new GmlComplexDataConvertor();
+        GmlComplexDataConverter convertor = new GmlComplexDataConverter();
 
         assertThrows(IllegalStateException.class, ()-> convertor.convert(TestObject.class, new GmlComplexData(), new GmlNode("id")));
     }
@@ -57,7 +55,7 @@ public class GmlComplexDataConvertorTest
     @DisplayName("Should throw exception if complex data contains non data fields")
     public void shouldThrowExceptionIfNonDataFields()
     {
-        GmlComplexDataConvertor convertor = new GmlComplexDataConvertor();
+        GmlComplexDataConverter convertor = new GmlComplexDataConverter();
 
         assertThrows(IllegalArgumentException.class, ()->convertor.convert(TestExceptionObject.class, new GmlComplexData(), new GmlNode("id")));
     }

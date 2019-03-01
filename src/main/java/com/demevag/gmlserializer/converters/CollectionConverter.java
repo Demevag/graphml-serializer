@@ -1,13 +1,12 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
-import com.demevag.gmlserializer.elements.GmlEdge;
 import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.parsers.Utils;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class CollectionConverter extends  ContainerConvertor<GmlElement, GmlElement>
+public class CollectionConverter extends ContainerConverter<GmlElement, GmlElement>
 {
     @Override
     protected Class getClassOFData(Field containerField)

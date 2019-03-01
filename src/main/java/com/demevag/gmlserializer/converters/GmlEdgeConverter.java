@@ -1,4 +1,4 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.annotations.EdgeSource;
 import com.demevag.gmlserializer.annotations.EdgeTarget;
@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GmlEdgeConvertor extends ElementConvertor<GmlEdge, GmlElement>
+public class GmlEdgeConverter extends ElementConvertor<GmlEdge, GmlElement>
 {
     @Override
     protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlEdge gmlEdge) throws IllegalAccessException

@@ -1,4 +1,4 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.parsers.Utils;
 

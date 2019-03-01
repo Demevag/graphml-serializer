@@ -1,11 +1,11 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.elements.GmlElement;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
-public abstract class ContainerConvertor<T extends GmlElement, P extends GmlElement>
+public abstract class ContainerConverter<T extends GmlElement, P extends GmlElement>
 {
     public Object convert(Field containerField, List<T> elements, P parentElement) throws IllegalAccessException, InstantiationException
     {
@@ -44,7 +44,7 @@ public abstract class ContainerConvertor<T extends GmlElement, P extends GmlElem
 
     protected Object extractDataFromGmlElement(Class dataClass, ElementType dataType, T element, P parentElement) throws InstantiationException, IllegalAccessException
     {
-        ElementConvertor convertor = ElementConvertorsFactory.getConvertorForField(dataType);
+        ElementConvertor convertor = ElementConvertersFactory.getConvertorForField(dataType);
 
         return convertor.convert(dataClass, element, parentElement);
     }

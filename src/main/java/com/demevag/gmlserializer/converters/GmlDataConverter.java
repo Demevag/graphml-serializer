@@ -1,4 +1,4 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.elements.GmlData;
 import com.demevag.gmlserializer.elements.GmlElement;
@@ -6,7 +6,7 @@ import com.demevag.gmlserializer.elements.GmlElement;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class GmlDataConvertor extends ElementConvertor<GmlData, GmlElement>
+public class GmlDataConverter extends ElementConvertor<GmlData, GmlElement>
 {
     @Override
     public Object convert(Class fieldsClass, GmlData gmlData, GmlElement parentElement)

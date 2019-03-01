@@ -1,4 +1,4 @@
-package com.demevag.gmlserializer.convertors;
+package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.elements.GmlGraph;
@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GmlGraphConvertor extends ElementConvertor<GmlGraph, GmlElement>
+public class GmlGraphConverter extends ElementConvertor<GmlGraph, GmlElement>
 {
     @Override
     protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlGraph gmlElement) throws IllegalAccessException
