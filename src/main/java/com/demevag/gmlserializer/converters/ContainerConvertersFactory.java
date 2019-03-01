@@ -9,7 +9,7 @@ public class ContainerConvertersFactory
             case EDGE_COLLECTION:
             case NODE_COLLECTION: return new CollectionConverter();
 
-            case NODE_MAP: return null;
+            case NODE_MAP: return new MapConverter();
         }
 
         throw new IllegalArgumentException("No convertor for "+containerType.name());
