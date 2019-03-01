@@ -25,7 +25,7 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
             {
                 ContainerType containerType = ContainerType.getTypeForField(field);
 
-                ContainerConvertor convertor = ContainerConvertorsFactory.getConvetrorForFieldType(containerType);
+                ContainerConvertor convertor = ContainerConvertersFactory.getConverterForFieldType(containerType);
 
                 List<GmlElement> elementsForContainerConvertor = extractGmlElementsForContainerField(gmlElement, containerType, field, parentElement);
 
