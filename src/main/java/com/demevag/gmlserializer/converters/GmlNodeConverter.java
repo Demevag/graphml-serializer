@@ -16,6 +16,7 @@ public class GmlNodeConverter extends ElementConvertor<GmlNode, GmlGraph>
     }
 
     //todo: fix repeating
+    //todo: add support for collection/map complexData
     @Override
     protected GmlElement extractGmlElementForFieldType(GmlNode gmlNode, ElementType elementType, Field field)
     {

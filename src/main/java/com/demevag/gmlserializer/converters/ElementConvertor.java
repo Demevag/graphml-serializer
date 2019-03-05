@@ -1,5 +1,6 @@
 package com.demevag.gmlserializer.converters;
 
+import com.demevag.gmlserializer.annotations.ComplexData;
 import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.parsers.Utils;
 
@@ -21,7 +22,7 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
 
         for(Field field : elementFields)
         {
-            if(Utils.isCollection(field) || Utils.isMap(field))
+            if( (Utils.isCollection(field) || Utils.isMap(field)) && !field.isAnnotationPresent(ComplexData.class))
             {
                 ContainerType containerType = ContainerType.getTypeForField(field);
 

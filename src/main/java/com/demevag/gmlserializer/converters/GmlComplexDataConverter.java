@@ -6,13 +6,32 @@ import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.elements.GmlKey;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GmlComplexDataConverter extends ElementConvertor<GmlComplexData, GmlElement>
 {
     @Override
-    protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlComplexData gmlComplexData)
+    protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlComplexData gmlComplexData) throws IllegalAccessException
     {
+        List<Field> convertedFields = new ArrayList<>();
+
+        for(Field field : fields)
+        {
+            if(Enum.class.isAssignableFrom(field.getType()))
+            {
+                GmlData elementWithEnum = (GmlData) extractGmlElementForFieldType(gmlComplexData, ElementType.DATA, field);
+
+                Object enumObject = Enum.valueOf((Class<? extends Enum>)field.getType(), (String)elementWithEnum.getData());
+
+                set(elementObject, field, enumObject);
+
+                convertedFields.add(field);
+            }
+        }
+
+        fields.removeAll(convertedFields);
+
         return elementObject;
     }
 
