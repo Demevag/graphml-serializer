@@ -11,7 +11,18 @@ public class GmlDataConverter extends ElementConvertor<GmlData, GmlElement>
     @Override
     public Object convert(Class fieldsClass, GmlData gmlData, GmlElement parentElement)
     {
-        return gmlData.getData();
+        Object data = gmlData.getData();
+
+        if(gmlData.getKey().getId().equals("id_field"))
+        {
+            String idString = (String)data;
+
+            String[] idStringParts = idString.split("_");
+
+            return idStringParts[idStringParts.length - 1];
+        }
+
+        return data;
     }
 
     @Override
