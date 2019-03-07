@@ -1,5 +1,6 @@
 package com.demevag.gmlserializer.converters;
 
+import com.demevag.gmlserializer.annotations.ComplexData;
 import com.demevag.gmlserializer.parsers.Utils;
 
 import java.lang.reflect.Field;
@@ -8,6 +9,7 @@ public enum ContainerType
 {
     NODE_COLLECTION,
     EDGE_COLLECTION,
+    COMPLEX_DATA_COLLECTION,
     NODE_MAP;
 
     public static ContainerType getTypeForField(Field field)
@@ -21,6 +23,9 @@ public enum ContainerType
 
         if(Utils.isMapOfNodes(field))
             return ContainerType.NODE_MAP;
+
+        if(Utils.isCollection(field) && field.isAnnotationPresent(ComplexData.class))
+            return ContainerType.COMPLEX_DATA_COLLECTION;
 
 
         throw new IllegalArgumentException("Unknown type of field "+field.getName());

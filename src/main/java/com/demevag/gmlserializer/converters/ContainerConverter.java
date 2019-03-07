@@ -35,6 +35,9 @@ public abstract class ContainerConverter<T extends GmlElement, P extends GmlElem
             case NODE_COLLECTION:
             case NODE_MAP:
                 return ElementType.NODE;
+            case COMPLEX_DATA_COLLECTION:{
+                return ElementType.COMPLEX_DATA;
+            }
         }
 
         throw new IllegalStateException("Container field can't be "+fieldType.name());

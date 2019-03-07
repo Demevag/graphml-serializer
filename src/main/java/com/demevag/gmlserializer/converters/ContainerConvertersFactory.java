@@ -7,7 +7,8 @@ public class ContainerConvertersFactory
         switch (containerType)
         {
             case EDGE_COLLECTION:
-            case NODE_COLLECTION: return new CollectionConverter();
+            case NODE_COLLECTION:
+            case COMPLEX_DATA_COLLECTION: return new CollectionConverter();
 
             case NODE_MAP: return new MapConverter();
         }

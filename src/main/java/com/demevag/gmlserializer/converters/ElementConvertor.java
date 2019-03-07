@@ -22,7 +22,7 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
 
         for(Field field : elementFields)
         {
-            if( (Utils.isCollection(field) || Utils.isMap(field)) && !field.isAnnotationPresent(ComplexData.class))
+            if( (Utils.isCollection(field) || Utils.isMap(field)))
             {
                 ContainerType containerType = ContainerType.getTypeForField(field);
 

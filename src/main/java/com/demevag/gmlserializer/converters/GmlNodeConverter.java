@@ -74,6 +74,25 @@ public class GmlNodeConverter extends ElementConvertor<GmlNode, GmlGraph>
             case NODE_COLLECTION:{
                 return new ArrayList<>(gmlNode.getSubGraphs().get(0).getNodes()); //todo: fix
             }
+
+            case COMPLEX_DATA_COLLECTION:{
+                List<GmlElement> complexDataList = new ArrayList<>();
+
+                Class containerDataClass = Utils.getCollectionArgClass(containerField);
+                String containerDataClassName = Utils.getClassNameWithoutPackage(containerDataClass);
+
+                for(GmlComplexData complexData : gmlNode.getComplexDataAttributes())
+                {
+                    GmlKey complexDataKey = complexData.getData().get(0).getKey();
+
+                    if(complexDataKey.getAtrrName().contains(containerDataClassName))
+                        complexDataList.add(complexData);
+                }
+
+                return complexDataList;
+
+            }
+
             case NODE_MAP:{
                 return new ArrayList<>(gmlNode.getSubGraphs().get(0).getNodes()); //todo: fix
             }
