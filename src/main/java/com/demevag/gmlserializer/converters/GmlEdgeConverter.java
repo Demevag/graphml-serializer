@@ -21,7 +21,7 @@ public class GmlEdgeConverter extends ElementConvertor<GmlEdge, GmlElement>
             if(field.isAnnotationPresent(EdgeSource.class))
             {
                 if(field.getType().equals(String.class))
-                    set(elementObject, field, gmlEdge.getSourceId());
+                    set(elementObject, field, idWitoutClassName(gmlEdge.getSourceId()));
                 //todo: else ?
 
                 handledFields.add(field);
@@ -29,7 +29,7 @@ public class GmlEdgeConverter extends ElementConvertor<GmlEdge, GmlElement>
             else if(field.isAnnotationPresent(EdgeTarget.class))
             {
                 if(field.getType().equals(String.class))
-                    set(elementObject, field, gmlEdge.getTargetId());
+                    set(elementObject, field, idWitoutClassName(gmlEdge.getTargetId()));
                 //todo: else ?
 
                 handledFields.add(field);
@@ -78,5 +78,12 @@ public class GmlEdgeConverter extends ElementConvertor<GmlEdge, GmlElement>
         }
 
         throw new IllegalArgumentException("Edge class can't contain "+ elementType.name()+" field");
+    }
+
+    private String idWitoutClassName(String idString)
+    {
+        String[] idStringParts = idString.split("_");
+
+        return idStringParts[idStringParts.length - 1];
     }
 }
