@@ -159,9 +159,10 @@ public class GmlDeserializer
 
             if(elementKey.matches(className+"_.+_key"+suffix))
                 currentComplexData.add(element);
-            else
+            else if(elementKey.contains("c:"))
             {
-                result.add(parseComplexData(currentComplexData));
+                if(currentComplexData.size() > 0)
+                    result.add(parseComplexData(currentComplexData));
 
                 currentComplexData.clear();
                 currentComplexData.add(element);
