@@ -16,6 +16,12 @@ public class GmlComplexDataConverter extends ElementConvertor<GmlComplexData, Gm
     {
         List<Field> convertedFields = new ArrayList<>();
 
+        if(Enum.class.isAssignableFrom(elementObject.getClass()))
+        {
+            fields.clear();
+            return elementObject;
+        }
+
         for(Field field : fields)
         {
             if(Enum.class.isAssignableFrom(field.getType()))
@@ -54,5 +60,16 @@ public class GmlComplexDataConverter extends ElementConvertor<GmlComplexData, Gm
         }
 
         throw new IllegalArgumentException("Complex data class can't contain "+ elementType.name()+" in field "+field.getName());
+    }
+
+    @Override
+    protected Object specificInstanciating(Class elementClass, GmlComplexData gmlComplexData) throws InstantiationException
+    {
+        if(Enum.class.isAssignableFrom(elementClass))
+        {
+            return Enum.valueOf((Class<? extends Enum>)elementClass, (String)gmlComplexData.getData().get(0).getData());
+        }
+
+        throw new InstantiationException("Can't create instance of "+elementClass.getName());
     }
 }

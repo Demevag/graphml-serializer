@@ -15,7 +15,15 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
 
     public Object convert(Class elementClass, T gmlElement, P parentElement) throws IllegalAccessException, InstantiationException
     {
-        Object elementObject = elementClass.newInstance();
+        Object elementObject = null;
+
+        try
+        {
+            elementObject = elementClass.newInstance();
+        } catch (InstantiationException e)
+        {
+            elementObject = specificInstanciating(elementClass, gmlElement);
+        }
 
         List<Field> elementFields = new ArrayList<>(Arrays.asList(elementClass.getDeclaredFields()));
 
@@ -67,5 +75,10 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
     protected List<GmlElement> extractGmlElementsForContainerField(T gmlElement, ContainerType containerType, Field containerField, P parentElement)
     {
         throw new IllegalStateException(this.getClass().getName() + " should't contain any containers");
+    }
+
+    protected Object specificInstanciating(Class elementClass, T gmlElement) throws InstantiationException
+    {
+        throw new InstantiationException("Can't create instance of "+elementClass.getName());
     }
 }

@@ -67,7 +67,12 @@ public class GmlComplexDataParser implements ElementParser
         for(Field field : fields)
         {
             if(Utils.isComplexData(field))
-                complexData.add((GmlComplexData) parse(field));
+            {
+                GmlComplexData complexDataForField = (GmlComplexData) parse(field);
+
+                if(complexDataForField.getData().size() > 0)
+                    complexData.add(complexDataForField);
+            }
         }
 
         return complexData;
@@ -96,10 +101,10 @@ public class GmlComplexDataParser implements ElementParser
     {
         Class enumClass = enumData.getDeclaringClass();
 
-        String attrName = enumClass.getName();
+        String attrName ="c:"+Utils.getClassNameWithoutPackage(enumClass);
 
         GmlKey key = new GmlKey(attrName+"_key", target, attrName);
-        key.setAttrType(String.class.getName());
+        key.setAttrType("string");
         Object data = enumData.name();
 
         GmlData dataAttribute = new GmlData(key, data);
