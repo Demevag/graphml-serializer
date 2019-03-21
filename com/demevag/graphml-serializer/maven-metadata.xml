@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.demevag</groupId>
+  <artifactId>graphml-serializer</artifactId>
+  <versioning>
+    <versions>
+      <version>1.03-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20190321224911</lastUpdated>
+  </versioning>
+</metadata>
