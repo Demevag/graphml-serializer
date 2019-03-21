@@ -47,7 +47,7 @@ public abstract class ContainerConverter<T extends GmlElement, P extends GmlElem
 
     protected Object extractDataFromGmlElement(Class dataClass, ElementType dataType, T element, P parentElement) throws InstantiationException, IllegalAccessException
     {
-        ElementConvertor convertor = ElementConvertersFactory.getConvertorForField(dataType);
+        ElementConverter convertor = ElementConvertersFactory.getConvertorForField(dataType);
 
         return convertor.convert(dataClass, element, parentElement);
     }

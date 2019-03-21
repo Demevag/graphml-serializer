@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GmlComplexDataConverter extends ElementConvertor<GmlComplexData, GmlElement>
+public class GmlComplexDataConverter extends ElementConverter<GmlComplexData, GmlElement>
 {
     @Override
     protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlComplexData gmlComplexData) throws IllegalAccessException

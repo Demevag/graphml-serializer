@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GmlGraphConverter extends ElementConvertor<GmlGraph, GmlElement>
+public class GmlGraphConverter extends ElementConverter<GmlGraph, GmlElement>
 {
     @Override
     protected Object convertSpecificFields(Object elementObject, List<Field> fields, GmlGraph gmlElement) throws IllegalAccessException

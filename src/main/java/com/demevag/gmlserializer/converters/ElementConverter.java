@@ -1,6 +1,5 @@
 package com.demevag.gmlserializer.converters;
 
-import com.demevag.gmlserializer.annotations.ComplexData;
 import com.demevag.gmlserializer.annotations.Ignore;
 import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.parsers.Utils;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElement>
+public  abstract class ElementConverter<T extends GmlElement, P extends GmlElement>
 {
 
     public Object convert(Class elementClass, T gmlElement, P parentElement) throws IllegalAccessException, InstantiationException
@@ -49,7 +48,7 @@ public  abstract class ElementConvertor <T extends GmlElement, P extends GmlElem
 
                 ElementType elementType = ElementType.getTypeForField(field);
 
-                ElementConvertor convertor = ElementConvertersFactory.getConvertorForField(elementType);
+                ElementConverter convertor = ElementConvertersFactory.getConvertorForField(elementType);
 
                 GmlElement elementForFieldConvertor = extractGmlElementForFieldType(gmlElement, elementType, field);
 

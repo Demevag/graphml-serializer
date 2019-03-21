@@ -6,7 +6,7 @@ import com.demevag.gmlserializer.elements.GmlElement;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class GmlDataConverter extends ElementConvertor<GmlData, GmlElement>
+public class GmlDataConverter extends ElementConverter<GmlData, GmlElement>
 {
     @Override
     public Object convert(Class fieldsClass, GmlData gmlData, GmlElement parentElement)

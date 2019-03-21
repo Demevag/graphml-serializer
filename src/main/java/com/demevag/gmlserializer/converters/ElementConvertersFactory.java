@@ -2,7 +2,7 @@ package com.demevag.gmlserializer.converters;
 
 public class ElementConvertersFactory
 {
-    public static ElementConvertor getConvertorForField(ElementType elementType)
+    public static ElementConverter getConvertorForField(ElementType elementType)
     {
         switch (elementType)
         {
