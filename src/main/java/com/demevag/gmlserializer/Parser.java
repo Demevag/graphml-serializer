@@ -1,3 +1,8 @@
+/*
+ * Copyright 2019  Viktor Khrulev
+ * Licensed under the Apache License, Version 2.0
+ */
+
 package com.demevag.gmlserializer;
 
 import com.demevag.gmlserializer.annotations.*;
@@ -15,8 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 //TODO: normal work with exceptions
-//TODO: add loggin
-//TODO: Обрабатывать enum как data
+//TODO: add logging
 public class Parser
 {
     public GmlGraph parse(Object object) throws IllegalAccessException
