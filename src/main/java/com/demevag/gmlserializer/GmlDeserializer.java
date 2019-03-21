@@ -18,7 +18,7 @@ public class GmlDeserializer
 {
     private Map<String, GmlKey> keys;
 
-    public GmlGraph deserialize(InputStream inputStream) throws JDOMException, IOException, ClassNotFoundException
+    public Object deserialize(InputStream inputStream, Class graphClass) throws JDOMException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(inputStream);
@@ -34,7 +34,11 @@ public class GmlDeserializer
         }
 
         Element graphElement = root.getChild("graph", Namespace.getNamespace("http://graphml.graphdrawing.org/xmlns"));
-        return parseGraph(graphElement);
+        GmlGraph gmlGraph =  parseGraph(graphElement);
+
+        Converter converter = new Converter();
+
+        return converter.resolve(graphClass, gmlGraph);
     }
 
     private GmlKey parseKey(Element element)
