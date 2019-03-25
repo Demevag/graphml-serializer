@@ -5,15 +5,21 @@
 
 package com.demevag.gmlserializer.parsers;
 
-import com.demevag.gmlserializer.annotations.ComplexData;
+import com.demevag.gmlserializer.Utils;
 import com.demevag.gmlserializer.elements.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * Implementation of parser for complex data fields
+ *
+ * @see com.demevag.gmlserializer.parsers.ElementParser ElementParser
+ * @see com.demevag.gmlserializer.elements.GmlComplexData GmlComplexData
+ * @author demevag
+ */
 public class GmlComplexDataParser implements ElementParser
 {
     private GmlKeyTarget target;

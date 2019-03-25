@@ -7,7 +7,7 @@ package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.annotations.Ignore;
 import com.demevag.gmlserializer.elements.GmlElement;
-import com.demevag.gmlserializer.parsers.Utils;
+import com.demevag.gmlserializer.Utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -5,6 +5,7 @@
 
 package com.demevag.gmlserializer.parsers;
 
+import com.demevag.gmlserializer.Utils;
 import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.elements.GmlGraph;
 import com.demevag.gmlserializer.elements.GmlNode;
@@ -15,6 +16,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementation of parser for map of nodes as values and nodes' ids as a key set
+ *
+ * @see com.demevag.gmlserializer.parsers.ContainerParser ContainerParser
+ * @see com.demevag.gmlserializer.elements.GmlNode GmlNode
+ * @author demevag
+ */
 public class GmlNodeMapParser implements ContainerParser
 {
     private Object parentObject;

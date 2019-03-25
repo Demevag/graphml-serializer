@@ -6,7 +6,7 @@
 package com.demevag.gmlserializer.converters;
 
 import com.demevag.gmlserializer.elements.*;
-import com.demevag.gmlserializer.parsers.Utils;
+import com.demevag.gmlserializer.Utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

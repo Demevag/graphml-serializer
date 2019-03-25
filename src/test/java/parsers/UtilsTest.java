@@ -1,6 +1,6 @@
 package parsers;
 
-import com.demevag.gmlserializer.parsers.Utils;
+import com.demevag.gmlserializer.Utils;
 import lombok.Data;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

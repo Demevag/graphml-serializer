@@ -5,14 +5,20 @@
 
 package com.demevag.gmlserializer.parsers;
 
-import com.demevag.gmlserializer.annotations.Ignore;
+import com.demevag.gmlserializer.Utils;
 import com.demevag.gmlserializer.elements.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Implementation of parser for graph
+ *
+ * @see com.demevag.gmlserializer.parsers.ElementParser ElementParser
+ * @see com.demevag.gmlserializer.elements.GmlGraph GmlGraph
+ * @author demevag
+ */
 public class GmlGraphParser implements ElementParser
 {
     private Object parentObject;

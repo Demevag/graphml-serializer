@@ -5,6 +5,7 @@
 
 package com.demevag.gmlserializer.parsers;
 
+import com.demevag.gmlserializer.Utils;
 import com.demevag.gmlserializer.annotations.Graph;
 import com.demevag.gmlserializer.annotations.SubGraph;
 import com.demevag.gmlserializer.elements.GmlEdgeType;
@@ -16,6 +17,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of parser for subgraphs
+ *
+ * @see com.demevag.gmlserializer.parsers.ElementParser ElementParser
+ * @see com.demevag.gmlserializer.elements.GmlGraph GmlGraph
+ * @author demevag
+ */
 public class GmlSubGraphParser implements ElementParser
 {
     private Object parentObject;

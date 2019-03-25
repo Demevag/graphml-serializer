@@ -5,7 +5,7 @@
 
 package com.demevag.gmlserializer.parsers;
 
-import com.demevag.gmlserializer.annotations.Ignore;
+import com.demevag.gmlserializer.Utils;
 import com.demevag.gmlserializer.elements.GmlData;
 import com.demevag.gmlserializer.elements.GmlElement;
 import com.demevag.gmlserializer.elements.GmlKey;
@@ -15,6 +15,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of parser for data fields
+ *
+ * @see com.demevag.gmlserializer.parsers.ElementParser ElementParser
+ * @see com.demevag.gmlserializer.elements.GmlData GmlData
+ * @author demevag
+ */
 public class GmlDataParser implements ElementParser
 {
     private GmlKeyTarget target;

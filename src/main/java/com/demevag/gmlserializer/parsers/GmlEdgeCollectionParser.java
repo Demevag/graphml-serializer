@@ -5,6 +5,7 @@
 
 package com.demevag.gmlserializer.parsers;
 
+import com.demevag.gmlserializer.Utils;
 import com.demevag.gmlserializer.elements.GmlEdge;
 import com.demevag.gmlserializer.elements.GmlEdgeType;
 import com.demevag.gmlserializer.elements.GmlElement;
@@ -14,6 +15,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Implementation of parser for collection of edges
+ *
+ * @see com.demevag.gmlserializer.parsers.ContainerParser ContainerParser
+ * @see com.demevag.gmlserializer.elements.GmlEdge GmlEdge
+ * @author demevag
+ */
 public class GmlEdgeCollectionParser implements ContainerParser
 {
 

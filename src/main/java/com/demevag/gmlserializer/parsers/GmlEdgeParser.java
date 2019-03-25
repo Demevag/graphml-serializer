@@ -5,6 +5,7 @@
 
 package com.demevag.gmlserializer.parsers;
 
+import com.demevag.gmlserializer.Utils;
 import com.demevag.gmlserializer.annotations.EdgeSource;
 import com.demevag.gmlserializer.annotations.EdgeTarget;
 import com.demevag.gmlserializer.annotations.Ignore;
@@ -14,6 +15,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of parser for edge
+ *
+ * @see com.demevag.gmlserializer.parsers.ElementParser ElementParser
+ * @see com.demevag.gmlserializer.elements.GmlEdge GmlEdge
+ * @author demevag
+ */
 public class GmlEdgeParser implements ElementParser
 {
     private Object parentObject;

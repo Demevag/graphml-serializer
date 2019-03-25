@@ -5,12 +5,19 @@
 
 package com.demevag.gmlserializer.parsers;
 
+import com.demevag.gmlserializer.Utils;
 import com.demevag.gmlserializer.elements.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementaion of parser for node
+ *
+ * @see com.demevag.gmlserializer.parsers.ElementParser ElementParser
+ * @see com.demevag.gmlserializer.elements.GmlNode GmlNode
+ */
 public class GmlNodeParser implements ElementParser
 {
     private GmlGraph graph;
