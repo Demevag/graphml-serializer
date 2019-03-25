@@ -16,31 +16,6 @@ import java.util.Map;
 
 public class Utils
 {
-    public static String getDataType(Object data)
-    {
-        Class dataClass = data.getClass();
-
-        return getDataType(dataClass);
-    }
-
-    public static String getDataType(Class dataClass)
-    {
-        String dataTypeName = "string";
-
-        if (dataClass.isPrimitive())
-        {
-            dataTypeName = dataClass.getName();
-
-            if (dataClass.getPackage() != null)
-                dataTypeName = dataTypeName
-                                        .replace(dataClass.getPackage().getName() + ".", "")
-                                        .toLowerCase();
-        }
-
-        return dataTypeName;
-    }
-
-
     public static boolean isPrimitiveOrString(Field field)
     {
         return field.getType().isPrimitive() || field.getType() == String.class;
@@ -79,6 +54,16 @@ public class Utils
         return field.isAnnotationPresent(ComplexData.class);
     }
 
+    public static boolean isSubGraph(Field field)
+    {
+        return field.isAnnotationPresent(SubGraph.class);
+    }
+
+    public static boolean isGraph(Field field)
+    {
+        return field.isAnnotationPresent(Graph.class);
+    }
+
     public static boolean isMap(Field field)
     {
         return Map.class.isAssignableFrom(field.getType());
@@ -112,6 +97,70 @@ public class Utils
         Class mapValClass = getMapValueClass(field);
 
         return mapValClass.isAnnotationPresent(Node.class);
+    }
+
+
+    public static String getDataType(Class dataClass)
+    {
+        String dataTypeName = "string";
+
+        if (dataClass.isPrimitive())
+        {
+            dataTypeName = dataClass.getName();
+
+            if (dataClass.getPackage() != null)
+                dataTypeName = dataTypeName
+                        .replace(dataClass.getPackage().getName() + ".", "")
+                        .toLowerCase();
+        }
+
+        return dataTypeName;
+    }
+
+    public static Object getFieldData(Field field, Object object) throws IllegalAccessException
+    {
+        field.setAccessible(true);
+
+        Object data = field.get(object);
+
+        field.setAccessible(false);
+
+        return data;
+    }
+
+    public static String getId(Field field, Object parentObject) throws IllegalAccessException
+    {
+        return getId(getFieldData(field, parentObject));
+    }
+
+    public static String getId(Object object) throws IllegalAccessException
+    {
+        Class objectClass = object.getClass();
+
+        Field[] fields = objectClass.getDeclaredFields();
+
+        Field idField = null;
+
+        for (Field field : fields)
+        {
+            if (field.isAnnotationPresent(Id.class) && idField == null)
+                idField = field;
+            else if (field.isAnnotationPresent(Id.class) && idField != null)
+                throw new IllegalStateException(objectClass.getName() + " contains more than one id field");
+        }
+
+        String id = (String) getFieldData(idField, object);
+
+        id.replace(objectClass.getPackage().getName(), "");
+        return id;
+    }
+
+    public static String getClassNameWithoutPackage(Class someClass)
+    {
+        if(someClass.getPackage() == null)
+            return someClass.getName();
+
+        return someClass.getName().replace(someClass.getPackage().getName()+".","");
     }
 
     public static Class getCollectionArgClass(Field field)
@@ -157,80 +206,5 @@ public class Utils
         return null;
     }
 
-    public static Object getFieldData(Field field, Object object) throws IllegalAccessException
-    {
-        field.setAccessible(true);
 
-        Object data = field.get(object);
-
-        field.setAccessible(false);
-
-        return data;
-    }
-
-    public static String getId(Field field, Object object) throws IllegalAccessException
-    {
-        Class fieldClass = field.getType();
-
-        Field idOfField = null;
-
-        Field[] fieldsOfFieldClass = fieldClass.getDeclaredFields();
-
-        for (Field f : fieldsOfFieldClass)
-        {
-            if (f.isAnnotationPresent(Id.class) && idOfField == null)
-                idOfField = f;
-            else if (f.isAnnotationPresent(Id.class) && idOfField != null)
-                throw new IllegalStateException(fieldClass.getName() + " contains more than one id field");
-        }
-
-        if (idOfField == null)
-            throw new IllegalStateException(fieldClass.getName() + " doesn't contain id field");
-
-        String id = (getFieldData(idOfField, getFieldData(field, object))).toString();
-
-        id.replace(fieldClass.getPackage().getName(), "");
-
-        return id;
-    }
-
-    public static String getId(Object object) throws IllegalAccessException
-    {
-        Class objectClass = object.getClass();
-
-        Field[] fields = objectClass.getDeclaredFields();
-
-        Field idField = null;
-
-        for (Field field : fields)
-        {
-            if (field.isAnnotationPresent(Id.class) && idField == null)
-                idField = field;
-            else if (field.isAnnotationPresent(Id.class) && idField != null)
-                throw new IllegalStateException(objectClass.getName() + " contains more than one id field");
-        }
-
-        String id = (String) getFieldData(idField, object);
-
-        id.replace(objectClass.getPackage().getName(), "");
-        return id;
-    }
-
-    public static String getClassNameWithoutPackage(Class someClass)
-    {
-        if(someClass.getPackage() == null)
-            return someClass.getName();
-
-        return someClass.getName().replace(someClass.getPackage().getName()+".","");
-    }
-
-    public static boolean isSubGraph(Field field)
-    {
-        return field.isAnnotationPresent(SubGraph.class);
-    }
-
-    public static boolean isGraph(Field field)
-    {
-        return field.isAnnotationPresent(Graph.class);
-    }
 }
