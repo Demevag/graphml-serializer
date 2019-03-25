@@ -65,8 +65,8 @@ public  class  UtilsTest
             e.printStackTrace();
         }
 
-        assertEquals(TestNode.class, Utils.getMapValueClass(nodesField));
-        assertEquals(TestNode.class, Utils.getMapValueClass(nodesFromGenericField));
+        assertEquals(TestingNode.class, Utils.getMapValueClass(nodesField));
+        assertEquals(TestingNode.class, Utils.getMapValueClass(nodesFromGenericField));
     }
 
     @Test
@@ -83,10 +83,10 @@ public  class  UtilsTest
     }
 
     @Data
-    public class TestClass <N extends TestNode>
+    public class TestClass <N extends TestingNode>
     {
         private Map<String, N> nodesFromGeneric;
-        private Map<String, TestNode> nodes;
+        private Map<String, TestingNode> nodes;
 
 
         private List<Integer> integerList = new ArrayList<>();

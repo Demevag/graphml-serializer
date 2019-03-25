@@ -4,7 +4,7 @@ import com.demevag.gmlserializer.annotations.ComplexData;
 import lombok.Data;
 
 @Data
-public class ComplexDataTest
+public class TestingComplexData
 {
     private String name;
     private double price;
@@ -12,7 +12,10 @@ public class ComplexDataTest
     @ComplexData
     private TestEnum testEnum = TestEnum.HAHA;
 
-    public ComplexDataTest(String name, double price)
+    public TestingComplexData()
+    {}
+
+    public TestingComplexData(String name, double price)
     {
         this.name = name;
         this.price = price;

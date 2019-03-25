@@ -9,7 +9,7 @@ import java.util.List;
 
 @Node
 @Data
-public class TestNode
+public class TestingNode
 {
     @Id
     private String nodeId;
@@ -18,5 +18,8 @@ public class TestNode
     private int intData;
 
     @ComplexData
-    private List<ComplexDataTest> complexData;
+    private List<TestingComplexData> complexData;
+
+    @ComplexData
+    private TestEnum testEnum;
 }

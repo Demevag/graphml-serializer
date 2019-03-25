@@ -8,8 +8,8 @@ import java.util.Map;
 
 @Graph(id ="testGraph")
 @Data
-public class TestGraph
+public class TestingGraph
 {
-    private Map<String,TestNode> nodes;
-    private List<TestEdge> edges;
+    private Map<String, TestingNode> nodes;
+    private List<TestingEdge> edges;
 }
