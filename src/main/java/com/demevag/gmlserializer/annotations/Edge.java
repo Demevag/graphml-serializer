@@ -10,9 +10,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation for marking edge class
+ *
+ * @author demevag
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Edge
 {
+    /**
+     * True if edge is directed, else false.
+     * Default - false
+     * @return
+     */
     boolean directed() default false;
 }
