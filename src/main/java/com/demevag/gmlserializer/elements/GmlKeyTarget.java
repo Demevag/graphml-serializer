@@ -5,6 +5,12 @@
 
 package com.demevag.gmlserializer.elements;
 
+/**
+ * Enum for representing target type of the key tag
+ *
+ * @see GmlKey GmlKey
+ * @author demevag
+ */
 public enum GmlKeyTarget
 {
     NODE("node"),

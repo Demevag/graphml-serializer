@@ -5,6 +5,11 @@
 
 package com.demevag.gmlserializer.elements;
 
+/**
+ * Marker interface for graphML tags classes
+ *
+ * @author demevag
+ */
 public interface GmlElement
 {
 }

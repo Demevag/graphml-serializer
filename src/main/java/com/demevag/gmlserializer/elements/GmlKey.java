@@ -7,6 +7,12 @@ package com.demevag.gmlserializer.elements;
 
 import lombok.Data;
 
+/**
+ * Class for representing graphML key tag
+ *
+ * @see GmlKeyTarget GmlKeyTarget
+ * @author demevag
+ */
 @Data
 public class GmlKey implements GmlElement
 {

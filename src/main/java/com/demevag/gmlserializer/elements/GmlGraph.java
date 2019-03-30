@@ -11,7 +11,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//TODO:method which return all GmlKey'
+/**
+ * Class for representing graphML graph tag
+ *
+ * @see GmlEdge GmlEdge
+ * @see GmlNode GmlNode
+ * @see GmlEdgeType GmlEdgeType
+ * @author demevag
+ */
 @Data
 public class GmlGraph implements GmlElement
 {

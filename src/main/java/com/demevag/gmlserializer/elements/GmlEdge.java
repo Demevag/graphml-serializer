@@ -10,6 +10,14 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for representing graphML edge tag
+ *
+ * @see GmlData GmlData
+ * @see GmlComplexData GmlComplexData
+ * @see GmlEdgeType GmlEdgeType
+ * @author demevag
+ */
 @Data
 public class GmlEdge implements GmlElement
 {

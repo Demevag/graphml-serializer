@@ -7,6 +7,12 @@ package com.demevag.gmlserializer.elements;
 
 import lombok.Data;
 
+/**
+ * Class for representing graphML data tag. Parsed from simple data fields(such as primitive types and string)
+ *
+ * @see GmlKey GmlKey
+ * @author demevag
+ */
 @Data
 public class GmlData implements GmlElement
 {

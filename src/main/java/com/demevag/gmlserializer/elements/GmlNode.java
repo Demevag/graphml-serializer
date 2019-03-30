@@ -10,6 +10,14 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for representing graphML node tag
+ *
+ * @see GmlGraph GmlGraph
+ * @see GmlEdge GmlEdge
+ * @see GmlData GmlData
+ * @see GmlComplexData GmlComplexData
+ */
 @Data
 public class GmlNode implements GmlElement
 {

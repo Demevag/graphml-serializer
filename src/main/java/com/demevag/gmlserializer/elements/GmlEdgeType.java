@@ -5,6 +5,12 @@
 
 package com.demevag.gmlserializer.elements;
 
+/**
+ * Enum of the edge type
+ *
+ * @see GmlEdge GmlEdge
+ * @author demevag
+ */
 public enum GmlEdgeType
 {
     DIRECTED("directed"),

@@ -11,6 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class for object data fields. Each field of this object will be serialized as gml data
+ *
+ * @see GmlData GmlData
+ * @author demevag
+ */
+
 @Data
 public class GmlComplexData implements GmlElement
 {
